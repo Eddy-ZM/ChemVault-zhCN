@@ -1,0 +1,616 @@
+[v-cloak] {
+  display: none;
+}
+
+.framework-hero {
+  background:
+    linear-gradient(135deg, rgba(82, 199, 184, 0.085), transparent 34%),
+    linear-gradient(90deg, rgba(0, 113, 227, 0.065), transparent 56%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+}
+
+.framework-app {
+  display: grid;
+  gap: 16px;
+}
+
+.framework-control-deck,
+.framework-main-grid,
+.react-view-grid {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.framework-control-deck {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.framework-search-panel,
+.framework-nav-panel,
+.framework-inspector-panel,
+.react-manuscript-window,
+.react-record-column,
+.react-side-stack,
+.react-data-panel,
+.react-inspector {
+  min-width: 0;
+}
+
+.framework-search-panel,
+.framework-nav-panel,
+.framework-inspector-panel,
+.react-manuscript-window,
+.react-record-column,
+.react-data-panel,
+.react-inspector {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 46%),
+    color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.framework-search-panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.framework-search-panel label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.framework-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 260px) auto;
+  gap: 10px;
+}
+
+.framework-search-row input,
+.framework-search-row select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--text);
+  padding: 11px;
+}
+
+.react-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.react-metric-strip div {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+  padding: 12px;
+  min-width: 0;
+}
+
+.react-metric-strip span,
+.react-data-panel > .eyebrow,
+.react-inspector > .eyebrow {
+  display: block;
+}
+
+.react-metric-strip strong {
+  display: block;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.react-metric-strip small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.framework-main-grid {
+  width: min(1540px, 100%);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.framework-nav-panel,
+.framework-inspector-panel {
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+}
+
+.framework-nav-panel {
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  align-items: stretch;
+}
+
+.framework-nav-panel > .eyebrow,
+.framework-nav-panel > .react-data-panel {
+  grid-column: 1 / -1;
+}
+
+.framework-inspector-panel {
+  grid-column: auto;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+}
+
+.framework-nav-panel button {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  text-align: center;
+  padding: 10px;
+  font-weight: 850;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.framework-nav-panel button:hover,
+.framework-nav-panel button:focus-visible {
+  border-color: var(--strong-line);
+  background: rgba(255, 255, 255, 0.075);
+  transform: translateY(-1px);
+}
+
+.framework-nav-panel button.active {
+  border-color: transparent;
+  background: var(--amber);
+  color: #ffffff;
+}
+
+.react-view-grid {
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(220px, 240px);
+  align-items: start;
+}
+
+.react-record-column {
+  display: grid;
+  gap: 9px;
+  padding: 13px;
+  max-height: 960px;
+  overflow: auto;
+}
+
+.react-section-head,
+.react-record-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.react-section-head h2,
+.react-record-header h2,
+.react-manuscript-window h2,
+.react-data-panel h3,
+.react-inspector h3 {
+  margin: 0;
+}
+
+.react-section-head strong {
+  color: var(--amber);
+  white-space: nowrap;
+}
+
+.react-panel-card {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  padding: 12px;
+  text-align: left;
+  overflow-wrap: anywhere;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.react-panel-card:hover,
+.react-panel-card:focus-visible {
+  border-color: var(--strong-line);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.react-panel-card.active {
+  border-color: color-mix(in srgb, var(--amber) 62%, var(--line));
+  background: color-mix(in srgb, var(--amber) 12%, var(--surface));
+}
+
+.react-panel-card strong {
+  font-size: 1rem;
+}
+
+.react-panel-card small,
+.react-panel-card p,
+.react-manuscript-window p,
+.react-data-panel p,
+.react-data-panel li,
+.react-inspector p,
+.react-mini-record p {
+  color: var(--muted);
+}
+
+.react-manuscript-window {
+  display: grid;
+  gap: 14px;
+  padding: 15px;
+  overflow-wrap: anywhere;
+}
+
+.react-evidence-grid,
+.react-argument-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.react-evidence-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.react-argument-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.react-side-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.react-data-panel,
+.react-inspector {
+  display: grid;
+  gap: 9px;
+  padding: 13px;
+  overflow-wrap: anywhere;
+  box-shadow: none;
+}
+
+.react-data-panel ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.react-mini-record {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+  padding: 10px;
+}
+
+.react-mini-record p {
+  margin: 0;
+}
+
+.react-score-ring {
+  width: 96px;
+  min-width: 96px;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background:
+    conic-gradient(var(--amber) var(--value), rgba(255, 255, 255, 0.08) 0),
+    var(--surface);
+}
+
+.react-score-ring span {
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.react-score-ring strong,
+.react-score-ring small {
+  position: relative;
+  z-index: 1;
+}
+
+.react-score-ring small {
+  align-self: start;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.react-ledger {
+  display: grid;
+  gap: 7px;
+}
+
+.react-ledger div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 7px;
+}
+
+.react-ledger span {
+  color: var(--muted);
+}
+
+.react-ledger strong[data-state="complete"] {
+  color: var(--green);
+}
+
+.react-ledger strong[data-state="partial"] {
+  color: var(--amber);
+}
+
+.react-ledger strong[data-state="missing"] {
+  color: var(--red);
+}
+
+.react-segmented {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.react-segmented button {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+  padding: 8px;
+  font-weight: 850;
+  transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+
+.react-segmented button:hover,
+.react-segmented button:focus-visible {
+  color: var(--text);
+  border-color: var(--strong-line);
+  transform: translateY(-1px);
+}
+
+.react-segmented button.active {
+  color: #ffffff;
+  background: var(--amber);
+  border-color: transparent;
+}
+
+.react-network {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.02);
+  background-size: 28px 28px;
+  padding: 12px;
+}
+
+.react-network-core,
+.react-network button {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  color: var(--text);
+  padding: 10px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.react-network-core {
+  border-color: color-mix(in srgb, var(--amber) 50%, var(--line));
+  background: color-mix(in srgb, var(--amber) 14%, var(--surface));
+  font-weight: 900;
+}
+
+@media (min-width: 1500px) {
+  .framework-main-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .framework-nav-panel {
+    position: static;
+    top: auto;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+  }
+
+  .framework-nav-panel button {
+    text-align: center;
+  }
+
+  .framework-inspector-panel {
+    grid-column: auto;
+    position: static;
+    top: auto;
+  }
+
+  .react-view-grid {
+    grid-template-columns: minmax(270px, 320px) minmax(0, 1fr) minmax(240px, 280px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .react-view-grid {
+    grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+  }
+
+  .framework-nav-panel,
+  .framework-inspector-panel {
+    position: static;
+  }
+
+  .framework-inspector-panel {
+    grid-column: auto;
+  }
+
+  .react-side-stack {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .framework-search-row,
+  .react-view-grid,
+  .react-evidence-grid,
+  .react-argument-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .framework-nav-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .framework-nav-panel > .eyebrow,
+  .framework-nav-panel > .react-data-panel {
+    grid-column: 1 / -1;
+  }
+
+  .react-metric-strip {
+    grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+  }
+
+  .react-record-header {
+    display: grid;
+  }
+}
+
+@media (max-width: 360px) {
+  .framework-nav-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Keep the React workbench aligned with the light Apple-style shell. */
+.framework-body,
+.framework-shell,
+.framework-stage,
+.react-network {
+  background: #f5f5f7;
+}
+
+.framework-nav-panel,
+.framework-content-panel,
+.framework-inspector-panel,
+.react-record-card,
+.react-workspace-card,
+.react-network-core,
+.react-network button {
+  border-color: rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #1d1d1f;
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.07);
+}
+
+.framework-tab.active,
+.react-action-primary,
+.react-workspace-tab.active {
+  background: #0071e3;
+  color: #ffffff;
+}
+
+html.dark-mode body.page-shell :where(.framework-body, .framework-shell, .framework-stage, .framework-section, .react-network),
+body.dark-mode.page-shell :where(.framework-body, .framework-shell, .framework-stage, .framework-section, .react-network) {
+  background: #101114;
+  color: #f5f5f7;
+}
+
+html.dark-mode body.page-shell :where(
+  .framework-search-panel,
+  .framework-nav-panel,
+  .framework-content-panel,
+  .framework-inspector-panel,
+  .react-manuscript-window,
+  .react-record-column,
+  .react-data-panel,
+  .react-inspector,
+  .react-record-card,
+  .react-workspace-card,
+  .react-panel-card,
+  .react-mini-record,
+  .react-network-core,
+  .react-network button
+),
+body.dark-mode.page-shell :where(
+  .framework-search-panel,
+  .framework-nav-panel,
+  .framework-content-panel,
+  .framework-inspector-panel,
+  .react-manuscript-window,
+  .react-record-column,
+  .react-data-panel,
+  .react-inspector,
+  .react-record-card,
+  .react-workspace-card,
+  .react-panel-card,
+  .react-mini-record,
+  .react-network-core,
+  .react-network button
+) {
+  background: #191b20;
+  border-color: rgba(255, 255, 255, 0.13);
+  color: #f5f5f7;
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.34);
+}
+
+html.dark-mode body.page-shell .react-network,
+body.dark-mode.page-shell .react-network {
+  border-color: rgba(255, 255, 255, 0.13);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    #15171b;
+  background-size: 28px 28px;
+}
+
+html.dark-mode body.page-shell :where(.framework-search-row input, .framework-search-row select),
+body.dark-mode.page-shell :where(.framework-search-row input, .framework-search-row select) {
+  background: #15171b;
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #f5f5f7;
+}
+
+html.dark-mode body.page-shell .react-panel-card:hover,
+html.dark-mode body.page-shell .react-panel-card:focus-visible,
+html.dark-mode body.page-shell .framework-nav-panel button:hover,
+html.dark-mode body.page-shell .framework-nav-panel button:focus-visible,
+body.dark-mode.page-shell .react-panel-card:hover,
+body.dark-mode.page-shell .react-panel-card:focus-visible,
+body.dark-mode.page-shell .framework-nav-panel button:hover,
+body.dark-mode.page-shell .framework-nav-panel button:focus-visible {
+  background: #252932;
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+html.dark-mode body.page-shell :where(.react-panel-card p, .react-panel-card small, .react-manuscript-window p, .react-data-panel p, .react-data-panel li, .react-inspector p, .react-mini-record p, .react-ledger span),
+body.dark-mode.page-shell :where(.react-panel-card p, .react-panel-card small, .react-manuscript-window p, .react-data-panel p, .react-data-panel li, .react-inspector p, .react-mini-record p, .react-ledger span) {
+  color: #a8adb7;
+}
+
+html.dark-mode body.page-shell .react-score-ring span,
+body.dark-mode.page-shell .react-score-ring span {
+  background: #191b20;
+}
+
+html.dark-mode body.page-shell :where(.react-panel-card.active, .react-network-core),
+body.dark-mode.page-shell :where(.react-panel-card.active, .react-network-core) {
+  background: rgba(0, 113, 227, 0.16);
+  border-color: rgba(0, 113, 227, 0.38);
+}

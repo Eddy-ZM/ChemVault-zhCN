@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /data/public-record-index.json
+
+Sitemap: https://chemvault.pages.dev/sitemap.xml

@@ -1,0 +1,12 @@
+name = "chemvault-zh"
+compatibility_date = "2026-05-29"
+
+# Cloudflare Pages configuration. Deploy with `npm run deploy`.
+# The build step writes a trimmed Pages bundle to /dist so large D1 seed
+# artifacts and generated development data are not uploaded as static assets.
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "chemvault"
+database_id = "285a4edc-d8d0-4ba1-8fd2-d0f10f4bccbd"

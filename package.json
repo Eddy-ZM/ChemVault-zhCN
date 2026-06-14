@@ -1,0 +1,25 @@
+{
+  "name": "chemvault-zh",
+  "version": "0.2.4",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "build": "npm run data:public && npm run sitemap && node scripts/build-pages.mjs",
+    "dev": "npm run build && wrangler pages dev dist --d1 DB=chemvault",
+    "dev:source": "wrangler pages dev . --d1 DB=chemvault",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name chemvault-zh",
+    "deploy:pages": "npm run deploy",
+    "deploy:source": "wrangler pages deploy . --project-name chemvault-zh",
+    "data:public": "node scripts/generate-public-index.mjs",
+    "data:json": "node scripts/export-data-json.mjs",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "seed:build": "node scripts/export-d1-seed.mjs",
+    "d1:schema": "wrangler d1 execute chemvault --file=schema.sql",
+    "d1:seed": "npm run seed:build && wrangler d1 execute chemvault --file=seed.sql",
+    "d1:migrate:images": "wrangler d1 execute chemvault --file=migrations/0001_add_record_images.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.95.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ChemVault 中文站",
+  "short_name": "ChemVault 中文",
+  "description": "面向学习和科研资料整理的学术化学资料库。",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f5f5f7",
+  "icons": [
+    {
+      "src": "/assets/chemvault-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/chemvault-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "zh-CN"
+}

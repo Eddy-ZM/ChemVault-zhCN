@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemVault 中文站 | 学术检索</title>
+  <meta name="description" content="检索 ChemVault 本地记录，并继续跳转到 NIH、NCBI、PubChem、NIST、IUPAC 和 DOI 级学术数据库。" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <script src="/scripts/boot.js?v=20260603a"></script>
+  <link rel="alternate" type="application/json" title="ChemVault public record index" href="/data/public-record-index.json" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260611a" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260611a" />
+  <script src="../data/chem-data.js?v=20260603a" defer></script>
+  <script src="../data/reagent-extension.js?v=20260603a" defer></script>
+  <script src="../data/research-data.js?v=20260603a" defer></script>
+  <script src="../data/dossier-data.js?v=20260603a" defer></script>
+  <script src="../data/method-data.js?v=20260603a" defer></script>
+  <script src="../data/spectroscopy-data.js?v=20260603a" defer></script>
+  <script src="../data/materials-data.js?v=20260603a" defer></script>
+  <script src="../data/database-expansion.js?v=20260603a" defer></script>
+  <script src="../data/reagent-megalibrary.js?v=20260603a" defer></script>
+  <script src="../data/knowledge-expansion.js?v=20260603a" defer></script>
+  <script src="../data/local-catalog-10000.js?v=20260603a" defer></script>
+  <script src="../data/external-sources.js?v=20260603a" defer></script>
+  <script src="../scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="../scripts/search-intent.js?v=20260608a" defer></script>
+  <script src="../scripts/api.js?v=20260603a" defer></script>
+  <script src="../scripts/motion.js?v=20260603a" defer></script>
+  <script src="../scripts/site-shell.js?v=20260611a" defer></script>
+  <script src="../scripts/search-page.js?v=20260611a" defer></script>
+  </head>
+<body class="page-shell" data-boot-label="检索">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+    <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页"><span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span><span><strong>ChemVault</strong><small>学术化学资料库</small></span></a>
+      <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="../index.html">首页</a>
+        <a href="search.html">检索</a>
+        <a href="workbench.html">工作台</a>
+        <a href="reagents.html">试剂</a>
+        <a href="materials.html">材料</a>
+        <a href="methods.html">方法</a>
+        <details class="nav-more">
+          <summary>更多</summary>
+          <div class="nav-more-menu">
+            <a href="app.html">应用</a>
+            <a href="research.html">研究</a>
+            <a href="dossiers.html">档案</a>
+            <a href="spectroscopy.html">谱学</a>
+            <a href="atlas.html">图谱</a>
+            <a href="library.html">资料库</a>
+            <a href="about.html">关于</a>
+            <a href="filing.html">备案信息</a>
+            <a href="team.html">团队</a>
+            <a href="developer.html">开发者</a>
+          </div>
+        </details>
+      </nav>
+      <div class="header-actions"><label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索本地记录..." /></label><button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button></div>
+    </div>
+    <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container page-hero-grid">
+        <div>
+          <p class="eyebrow">本地优先检索 · 学术来源跳转</p>
+          <h1>学术检索</h1>
+          <p>先检索 ChemVault 本地记录；当本地资料不足时，使用同一检索词继续访问 NIH/NLM、PubChem、PubMed Central、NIST、IUPAC 和 DOI 元数据来源。</p>
+        </div>
+        <aside class="page-index-card">
+          <strong>检索模型</strong>
+          <ol>
+            <li>本地整理匹配</li>
+            <li>范围与证据预览</li>
+            <li>外部学术来源跳转</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <noscript>
+      <section class="section section-tint">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">机器可读数据</p>
+              <h2>无页面 JavaScript 时的检索</h2>
+            </div>
+            <p>完整公开记录索引提供 JSON 文件。外部工具可直接读取并跟随记录链接。</p>
+          </div>
+          <div class="gateway-grid">
+            <a class="external-source-card" href="/data/public-record-index.json"><span class="eyebrow">完整公开数据</span><strong>打开 JSON 索引</strong><span>记录、摘要、标签、安全提示和链接。</span></a>
+            <a class="external-source-card" href="/pages/search.html?q=ketone%20to%20alcohol"><span class="eyebrow">示例检索</span><strong>酮到醇</strong><span>用于查询 NaBH4、LiAlH4、H2/Pd 和 MPV 还原的意图检索。</span></a>
+          </div>
+        </div>
+      </section>
+    </noscript>
+
+    <section class="section search-studio-section">
+      <div class="container search-workbench-grid">
+        <aside class="page-panel search-control-panel">
+          <form id="academicSearchForm">
+            <label for="academicSearch">学术检索词</label>
+            <input id="academicSearch" type="search" placeholder="石墨烯氧化物、DMP、水凝胶、毒理学..." autocomplete="off" />
+            <div class="scope-chip-row" aria-label="Common search scopes">
+              <button class="scope-chip is-active" type="button" data-scope-chip="all">全部</button>
+              <button class="scope-chip" type="button" data-scope-chip="reagent">试剂</button>
+              <button class="scope-chip" type="button" data-scope-chip="material">材料</button>
+              <button class="scope-chip" type="button" data-scope-chip="compound">化合物</button>
+              <button class="scope-chip" type="button" data-scope-chip="source">来源</button>
+            </div>
+            <div class="primary-filter-grid" aria-label="Primary filters">
+              <label for="searchScope">类型
+                <select id="searchScope">
+                  <option value="all">全部本地记录</option>
+                  <option value="reaction">反应体系</option>
+                  <option value="reactant">反应物类别</option>
+                  <option value="reagent">试剂</option>
+                  <option value="compound">化合物</option>
+                  <option value="material">材料</option>
+                  <option value="route">路线</option>
+                  <option value="mechanism">机理</option>
+                  <option value="concept">概念</option>
+                  <option value="source">来源</option>
+                  <option value="research case">研究案例</option>
+                  <option value="dossier">研究档案</option>
+                  <option value="method">方法标准</option>
+                  <option value="spectroscopy">谱学证据</option>
+                </select>
+              </label>
+              <label for="searchSource">来源
+                <select id="searchSource">
+                  <option value="all">整理记录 + 会话导入</option>
+                  <option value="curated">本地整理记录</option>
+                  <option value="imported">已保存 NIH/PubChem 导入</option>
+                </select>
+              </label>
+              <label for="searchEvidence">成熟度
+                <select id="searchEvidence">
+                  <option value="0">任意证据等级</option>
+                  <option value="70">70%+</option>
+                  <option value="80">80%+</option>
+                  <option value="90">90%+</option>
+                </select>
+              </label>
+            </div>
+            <details class="advanced-search-disclosure" id="advancedSearchDisclosure">
+              <summary>高级筛选 <span id="advancedFilterSummary">领域、标签、排序、精确短语</span></summary>
+              <div class="advanced-search-grid" aria-label="Advanced local filters">
+                <label for="searchFacet">领域 / 家族
+                  <select id="searchFacet">
+                    <option value="all">全部领域 / 家族</option>
+                  </select>
+                </label>
+                <label for="searchTag">标签
+                  <select id="searchTag">
+                    <option value="all">全部标签</option>
+                  </select>
+                </label>
+                <label for="searchSort">排序
+                  <select id="searchSort">
+                    <option value="relevance">相关性</option>
+                    <option value="evidence">证据成熟度</option>
+                    <option value="type">记录类型</option>
+                    <option value="title">标题</option>
+                  </select>
+                </label>
+                <label class="inline-check" for="searchExact">
+                  <input id="searchExact" type="checkbox" />
+                  <span>精确短语</span>
+                </label>
+              </div>
+            </details>
+            <button class="primary-button" type="submit">检索学术索引</button>
+          </form>
+          <div class="search-note">
+            <span class="eyebrow">外部来源说明</span>
+            <p>无需外部 API 密钥。ChemVault 生成透明的外部查询链接，因此公开静态站可以保持轻量并部署在 Cloudflare Pages 等平台。</p>
+          </div>
+        </aside>
+
+        <div class="search-output-grid">
+          <section class="result-panel local-results-panel">
+            <div class="library-toolbar">
+              <span class="label">检索结果</span>
+              <strong id="searchSummary">0 条结果</strong>
+            </div>
+            <div class="live-enrichment-status" id="liveEnrichmentStatus">输入学术检索词后先检索 ChemVault；本地数据不足时再查询 NIH PubChem 和 PubMed。</div>
+            <div class="local-result-grid academic-result-list" id="localSearchResults"></div>
+          </section>
+
+          <section class="result-panel nih-import-panel" aria-live="polite">
+            <div class="library-toolbar">
+              <span class="label">学术来源同步</span>
+              <button class="small-button" type="button" data-import-all hidden>全部保存</button>
+            </div>
+            <div class="live-enrichment-grid" id="liveEnrichmentResults"></div>
+            <div class="imported-records-panel" id="savedExternalRecords"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tint">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">学术数据库</p>
+            <h2>继续访问 ChemVault 之外的来源</h2>
+          </div>
+          <p>这些链接会把当前检索词带到公开学术来源。当 ChemVault 没有记录、某条记录需要更强证据，或需要原始文献与参考数据时，可以继续使用这些来源。</p>
+        </div>
+        <div class="gateway-grid" id="externalSearchLinks"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-grid developer-footer-grid">
+      <div class="footer-brand-block">
+        <a class="footer-brand" href="../index.html">
+          <span class="footer-brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+          <span><strong>ChemVault</strong><small>学术化学知识门户</small></span>
+        </a>
+        <p>ChemVault 中文站仅用于学习、科研资料整理和公开信息检索；资料可能存在错误，实际研究、实验和安全判断请以权威来源复核。</p>
+      </div>
+      <div class="footer-column">
+        <span class="footer-heading">联系方式</span>
+        <a href="mailto:contact@chemvault.science">contact@chemvault.science</a>
+        <span>由 Ziwen M. 创建并维护。</span>
+      </div>
+      <div class="footer-column footer-legal">
+        <span class="footer-heading">合规信息</span>
+        <a href="filing.html">网站说明与备案信息</a>
+        <span>ICP备案号：待填写</span>
+        <span>© 2026 ChemVault，保留所有权利。</span>
+      </div>
+    </div>
+  </footer>
+  <div class="site-version">ChemVault v0.2.4</div>
+</body>
+</html>

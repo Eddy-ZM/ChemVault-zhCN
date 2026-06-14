@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemVault 中文站 | 学术化学资料库</title>
+  <meta name="description" content="ChemVault 中文站提供面向学习和科研的信息整理，包括试剂、材料、谱学、方法和学术来源记录检索。" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <script src="/scripts/boot.js?v=20260603a"></script>
+  <meta property="og:title" content="ChemVault 中文站 | 学术化学资料库" />
+  <meta property="og:description" content="面向中文用户的 ChemVault 公开入口，提供化学记录、材料图谱和学术检索工具。" />
+  <meta property="og:type" content="website" />
+  <link rel="alternate" type="application/json" title="ChemVault 公开记录索引" href="/data/public-record-index.json" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="assets/styles.css?v=20260611a" />
+  <link rel="stylesheet" href="assets/portal.css?v=20260611a" />
+  <script src="data/chem-data.js?v=20260603a" defer></script>
+  <script src="data/reagent-extension.js?v=20260603a" defer></script>
+  <script src="data/research-data.js?v=20260603a" defer></script>
+  <script src="data/dossier-data.js?v=20260603a" defer></script>
+  <script src="data/method-data.js?v=20260603a" defer></script>
+  <script src="data/spectroscopy-data.js?v=20260603a" defer></script>
+  <script src="data/materials-data.js?v=20260603a" defer></script>
+  <script src="data/database-expansion.js?v=20260603a" defer></script>
+  <script src="data/reagent-megalibrary.js?v=20260603a" defer></script>
+  <script src="data/knowledge-expansion.js?v=20260603a" defer></script>
+  <script src="data/local-catalog-10000.js?v=20260603a" defer></script>
+  <script src="data/external-sources.js?v=20260603a" defer></script>
+  <script src="scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="scripts/search-intent.js?v=20260608a" defer></script>
+  <script src="scripts/api.js?v=20260603a" defer></script>
+  <script src="scripts/motion.js?v=20260603a" defer></script>
+  <script src="scripts/home.js?v=20260611a" defer></script>
+  </head>
+<body data-boot-label="首页">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+
+    <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html" aria-label="ChemVault 首页"><span class="brand-mark" aria-hidden="true"><img src="assets/chemvault-logo-mark.png" alt="" /></span><span><strong>ChemVault</strong><small>学术化学资料库</small></span></a>
+      <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html">首页</a>
+        <a href="pages/search.html">检索</a>
+        <a href="pages/workbench.html">工作台</a>
+        <a href="pages/reagents.html">试剂</a>
+        <a href="pages/materials.html">材料</a>
+        <a href="pages/methods.html">方法</a>
+        <details class="nav-more">
+          <summary>更多</summary>
+          <div class="nav-more-menu">
+            <a href="pages/app.html">应用</a>
+            <a href="pages/research.html">研究</a>
+            <a href="pages/dossiers.html">档案</a>
+            <a href="pages/spectroscopy.html">谱学</a>
+            <a href="pages/atlas.html">图谱</a>
+            <a href="pages/library.html">资料库</a>
+            <a href="pages/about.html">关于</a>
+            <a href="pages/filing.html">备案信息</a>
+            <a href="pages/team.html">团队</a>
+            <a href="pages/developer.html">开发者</a>
+          </div>
+        </details>
+      </nav>
+      <div class="header-actions"><label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索本地记录..." /></label><button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button></div>
+    </div>
+    <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
+  </header>
+
+  <main id="main">
+    <section class="home-hero" id="top">
+      <div class="container home-hero-grid">
+        <div class="home-hero-copy">
+          <p class="eyebrow">公开化学资料索引 · 本地记录 · 学术来源入口</p>
+          <h1>ChemVault</h1>
+          <p class="lead">ChemVault 中文站面向学习、科研资料整理和文献线索检索，提供化学记录、反应体系、试剂、材料、机理、证据核查和学术来源跳转的一体化入口。</p>
+          <form class="home-search-card" id="homeSearchForm">
+            <label for="homeSearch">检索本地记录或继续访问外部学术来源</label>
+            <div class="home-search-row">
+              <input id="homeSearch" type="search" placeholder="可尝试：石墨烯氧化物、DMP、溶胶凝胶、PubMed 主题..." autocomplete="off" />
+              <button class="primary-button" type="submit">检索</button>
+            </div>
+            <div class="home-quick-links" id="homeQuickLinks"></div>
+          </form>
+        </div>
+
+        <aside class="home-status-panel">
+          <div class="panel-toolbar">
+            <span class="status-dot"></span>
+            <span id="backendStatusLabel">正在检查后端</span>
+            <code id="backendStatusMode">Cloudflare Pages</code>
+          </div>
+          <div class="backend-status-list" id="backendStatusList" aria-live="polite">
+            <span>本地备用数据</span>
+          </div>
+          <div class="home-metric-grid" aria-label="ChemVault metrics">
+            <div><strong id="metricSystems">0</strong><span>反应体系</span></div>
+            <div><strong id="metricReactants">0</strong><span>反应物记录</span></div>
+            <div><strong id="metricReagents">0</strong><span>试剂记录</span></div>
+            <div><strong id="metricCompounds">0</strong><span>化合物</span></div>
+            <div><strong id="metricMaterials">0</strong><span>材料记录</span></div>
+            <div><strong id="metricMechanisms">0</strong><span>机理记录</span></div>
+            <div><strong id="metricSources">0</strong><span>来源链接</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <noscript>
+      <section class="section section-tint">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">机器可读数据</p>
+              <h2>ChemVault 公开记录索引</h2>
+            </div>
+            <p>完整公开记录索引提供 JSON 版本，便于搜索引擎、外部工具以及未启用 JavaScript 的访问者读取。</p>
+          </div>
+          <div class="portal-grid home-portal-grid">
+            <a class="portal-card portal-card-featured" href="/data/public-record-index.json"><span>完整公开数据</span><strong>打开 JSON 索引</strong><p>包含公开记录标题、类型、摘要、标签、安全提示和记录链接。</p><em>打开数据</em></a>
+            <a class="portal-card" href="/pages/search.html?q=ketone%20to%20alcohol"><span>示例意图检索</span><strong>酮到醇</strong><p>检索 NaBH4、LiAlH4、H2/Pd 和 MPV 还原等还原方案。</p><em>打开检索</em></a>
+          </div>
+        </div>
+      </section>
+    </noscript>
+
+    <section class="section section-tint">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">站点导航</p>
+            <h2>选择一个工作区</h2>
+          </div>
+          <p>首页保持简洁，详细记录、工具和学术材料分布在独立页面，方便访问者浏览，也方便后续维护和备案审核。</p>
+        </div>
+        <div class="portal-grid home-portal-grid">
+          <a class="portal-card portal-card-featured" href="pages/app.html"><span>React 框架层</span><strong>框架应用</strong><p>基于 JSON 数据的组件化动态界面，包含研究桌面、档案系统、反应矩阵、分子浏览和面板模块。</p><em>打开页面</em></a>
+          <a class="portal-card portal-card-featured" href="pages/workbench.html"><span>综合研究工作区</span><strong>研究工作台</strong><p>连接反应体系、反应物、试剂、化合物、材料、机理、路线逻辑和证据队列的动态控制层。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/search.html"><span>联合检索</span><strong>学术检索</strong><p>先检索 ChemVault 本地记录，再跳转到 PubMed、PubChem、PMC、NIST、IUPAC 等学术数据库继续查询。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/reagents.html"><span>扩展数据库</span><strong>试剂记录</strong><p>整理有机、分析、聚合物、材料和催化相关试剂，包含适用范围、机理、限制和安全提示。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/materials.html"><span>材料图谱</span><strong>材料记录</strong><p>覆盖聚合物、纳米材料、氧化物、MOF、水凝胶、电池材料和表征证据。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/spectroscopy.html"><span>证据工作区</span><strong>谱学证据</strong><p>整理 IR、NMR 和 MS 案例，区分观测信号、结构判断和缺失证据。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/methods.html"><span>可重复性</span><strong>方法标准</strong><p>包含主张审查流程、证据等级、可重复性记录和稿件标准。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/dossiers.html"><span>研究档案</span><strong>研究档案</strong><p>以项目档案形式整理研究主张、限制、可观测证据和可重复性状态。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/atlas.html"><span>机理图谱</span><strong>机理图谱</strong><p>整理速率规律、立体化学、底物假设和常见失败模式等机理节点。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/library.html"><span>术语</span><strong>学术资料库</strong><p>为学术写作整理概念定义、来源出处和术语记录。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/about.html"><span>项目说明</span><strong>关于</strong><p>查看 ChemVault 项目说明与创建者信息。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/team.html"><span>团队</span><strong>团队</strong><p>查看 ChemVault 团队页面和创建者简介。</p><em>打开页面</em></a>
+          <a class="portal-card" href="pages/developer.html"><span>开发者</span><strong>开发者</strong><p>查看 ChemVault 开发者简介。</p><em>打开页面</em></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">外部学术检索</p>
+            <h2>当本地记录不足时</h2>
+          </div>
+          <p>ChemVault 可以把同一检索词带到公开学术数据库。NIH/NLM 资源可用于生物医学文献、全文文章和化合物记录查询。</p>
+        </div>
+        <div class="gateway-grid" id="externalGateway"></div>
+      </div>
+    </section>
+    <section class="section section-tint" aria-labelledby="home-filing-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">首页备案信息</p>
+            <h2 id="home-filing-title">网站说明与合规展示</h2>
+          </div>
+          <p>ChemVault 中文站用于学术资料整理、公开来源检索和化学学习辅助，不提供化学品交易、实验代做、危险品处置或医疗建议。备案号取得后将在页脚和备案信息页展示。</p>
+        </div>
+        <div class="portal-grid home-portal-grid">
+          <a class="portal-card" href="pages/filing.html"><span>备案信息</span><strong>网站说明与 ICP 备案</strong><p>查看网站性质、内容范围、联系方式、安全声明和备案号占位信息。</p><em>打开页面</em></a>
+          <article class="portal-card"><span>内容边界</span><strong>公开资料与学习用途</strong><p>站点内容用于资料检索和学术学习，实际实验和安全判断需以权威来源与机构规范复核。</p></article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+    <footer class="site-footer">
+    <div class="container footer-grid developer-footer-grid">
+      <div class="footer-brand-block">
+        <a class="footer-brand" href="index.html">
+          <span class="footer-brand-mark" aria-hidden="true"><img src="assets/chemvault-logo-mark.png" alt="" /></span>
+          <span><strong>ChemVault</strong><small>学术化学知识门户</small></span>
+        </a>
+        <p>ChemVault 中文站仅用于学习、科研资料整理和公开信息检索；资料可能存在错误，实际研究、实验和安全判断请以权威来源复核。</p>
+      </div>
+      <div class="footer-column">
+        <span class="footer-heading">联系方式</span>
+        <a href="mailto:contact@chemvault.science">contact@chemvault.science</a>
+        <span>由 Ziwen M. 创建并维护。</span>
+      </div>
+      <div class="footer-column footer-legal">
+        <span class="footer-heading">合规信息</span>
+        <a href="pages/filing.html">网站说明与备案信息</a>
+        <span>ICP备案号：待填写</span>
+        <span>© 2026 ChemVault，保留所有权利。</span>
+      </div>
+    </div>
+  </footer>
+  <div class="site-version">ChemVault v0.2.4</div>
+</body>
+</html>
