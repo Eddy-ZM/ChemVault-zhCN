@@ -440,6 +440,50 @@ body.light-mode .graph-board {
   font-size: 0.88rem;
 }
 
+.home-trust-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 820px;
+  margin-top: 12px;
+}
+
+.home-trust-rail a {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(0, 113, 227, 0.06), transparent 55%),
+    rgba(255, 255, 255, 0.58);
+  padding: 12px;
+  transition: transform var(--motion-fast) var(--ease-spring), border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+
+.home-trust-rail a:hover,
+.home-trust-rail a:focus-visible {
+  border-color: var(--strong-line);
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.07);
+  transform: translateY(-1px);
+}
+
+.home-trust-rail span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.home-trust-rail strong {
+  display: block;
+  min-width: 0;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
 .home-status-panel {
   padding: 16px;
 }
@@ -1805,6 +1849,7 @@ body.light-mode .graph-board {
   .fallback-source-grid,
   .home-metric-grid,
   .home-search-row,
+  .home-trust-rail,
   .record-trust-strip,
   .record-safety-grid,
   .record-source-meta,
@@ -2699,6 +2744,7 @@ html.dark-mode body:not(.page-shell) :where(
   .home-search-card,
   .home-metric-grid > div,
   .home-quick-card,
+  .home-trust-rail a,
   .portal-card,
   .page-index-card,
   .external-source-card,
@@ -2711,6 +2757,7 @@ body.dark-mode:not(.page-shell) :where(
   .home-search-card,
   .home-metric-grid > div,
   .home-quick-card,
+  .home-trust-rail a,
   .portal-card,
   .page-index-card,
   .external-source-card,
@@ -2728,6 +2775,12 @@ html.dark-mode body:not(.page-shell) :where(.portal-card-featured, .nih-import-p
 body.dark-mode:not(.page-shell) :where(.portal-card-featured, .nih-import-panel) {
   background: linear-gradient(180deg, rgba(0, 113, 227, 0.16), rgba(25, 27, 32, 0.96));
   border-color: rgba(0, 113, 227, 0.32);
+}
+
+html.dark-mode body:not(.page-shell) :where(.home-trust-rail a:hover, .home-trust-rail a:focus-visible),
+body.dark-mode:not(.page-shell) :where(.home-trust-rail a:hover, .home-trust-rail a:focus-visible) {
+  background: #1f2228;
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 html.dark-mode body:not(.page-shell) :where(.external-source-card, .local-result-card)::before,
@@ -2754,7 +2807,7 @@ body.dark-mode:not(.page-shell) :where(.home-search-card input, .home-search-row
   color: #f5f5f7;
 }
 
-html.dark-mode body:not(.page-shell) :where(.lead, .section-heading p, .portal-card p, .home-quick-card span),
-body.dark-mode:not(.page-shell) :where(.lead, .section-heading p, .portal-card p, .home-quick-card span) {
+html.dark-mode body:not(.page-shell) :where(.lead, .section-heading p, .portal-card p, .home-quick-card span, .home-trust-rail span),
+body.dark-mode:not(.page-shell) :where(.lead, .section-heading p, .portal-card p, .home-quick-card span, .home-trust-rail span) {
   color: #a8adb7;
 }

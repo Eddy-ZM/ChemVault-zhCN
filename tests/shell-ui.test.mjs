@@ -51,8 +51,18 @@ test("search page keeps long-tail filters behind a collapsed advanced disclosure
   assert.match(advanced, /id="searchExact"/, "exact phrase filter is inside advanced filters");
 });
 
+test("home page exposes trust shortcuts in the first viewport", () => {
+  const html = read("index.html");
+  const hero = html.match(/<section class="home-hero" id="top">([\s\S]*?)<\/section>/)?.[1] || "";
+
+  assert.match(hero, /class="home-trust-rail"/, "home hero includes a compact trust shortcut rail");
+  assert.match(hero, /href="data\/public-record-index\.json"[\s\S]*完整公开数据/, "home hero links to the public record index");
+  assert.match(hero, /href="pages\/search\.html"[\s\S]*本地优先检索/, "home hero links to local-first search");
+  assert.match(hero, /href="pages\/filing\.html"[\s\S]*合规边界/, "home hero links to filing and compliance information");
+});
+
 test("updated shell assets use a fresh cache key", () => {
-  const staleAssetPattern = /(styles\.css|portal\.css|home\.js|site-shell\.js|search-page\.js)\?v=20260603a/;
+  const staleAssetPattern = /(styles\.css|portal\.css|home\.js|site-shell\.js|search-page\.js)\?v=20260603a|portal\.css\?v=20260611a/;
 
   for (const file of pageFiles) {
     assert.doesNotMatch(read(file), staleAssetPattern, `${file} does not pin changed shell assets to the previous cache key`);
