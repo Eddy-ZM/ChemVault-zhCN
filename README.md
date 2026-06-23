@@ -27,3 +27,12 @@ npm run build
 ## 说明
 
 化学记录中的英文名称、缩写和外部数据库名称部分保留英文，以保持学术检索准确性。本站内容仅用于学习、科研资料整理和公开信息检索，不构成实验、安全、医疗或商业建议。
+
+## License
+
+This repository is source-available but not open source. Public visibility is
+for review and reference only; no rights are granted to use, copy, modify,
+distribute, host, deploy, or create derivative works without prior written
+permission from Ziwen Mu or the repository owner.
+
+See [LICENSE](./LICENSE). All rights reserved.
