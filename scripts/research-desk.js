@@ -77,7 +77,7 @@
         <strong>${escapeHTML(item.thesis)}</strong>
       </div>
       <div class="mini-source-row">
-        ${getSources(item.sourceRefs).map((source) => `<a href="${escapeHTML(source.url)}" target="_blank" rel="noreferrer">${escapeHTML(source.short)}</a>`).join("")}
+        ${getSources(item.sourceRefs).map((source) => `<a href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(source.short)}</a>`).join("")}
       </div>
     `;
   }

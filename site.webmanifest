@@ -1,7 +1,7 @@
 {
   "name": "ChemVault 中文站",
   "short_name": "ChemVault 中文",
-  "description": "面向学习和科研资料整理的学术化学资料库。",
+  "description": "面向化合物检索、科学文档理解和 AI 辅助研究工作流的化学知识基础设施。",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",

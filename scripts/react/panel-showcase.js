@@ -1,17 +1,36 @@
 (function () {
   const h = React.createElement;
   const C = window.ChemVaultReact;
+  const asArray = (value) => Array.isArray(value) ? value : [];
+  const asObject = (value) => (value && typeof value === "object" ? value : {});
+  const asString = (value) => String(value || "").toLowerCase();
 
   function PanelShowcase({ payload, query, selectedRecord }) {
-    const term = String(query || "").toLowerCase();
+    const term = asString(query);
+    const chem = asObject(payload?.chem);
+    const research = asObject(payload?.research);
+    const dossiers = asObject(payload?.dossiers);
+    const materials = asObject(payload?.materials);
     const cards = [
-      ...(payload.chem?.reactionSystems || []).map((item) => ({ type: "Reaction", title: item.name, body: item.className, tags: [item.domain] })),
-      ...(payload.research?.caseStudies || []).map((item) => ({ type: "Research", title: item.title, body: item.question, tags: [item.discipline] })),
-      ...(payload.dossiers?.dossiers || []).map((item) => ({ type: "Dossier", title: item.title, body: item.abstract, tags: item.keywords || [] })),
-      ...(payload.materials?.materials || []).map((item) => ({ type: "Material", title: item.name, body: item.synthesis, tags: [item.family] }))
+      ...asArray(chem.reactionSystems).map((item) => {
+        const safe = asObject(item);
+        return { type: "Reaction", title: safe.name || "Reaction system", body: safe.className || "", tags: [safe.domain || ""] };
+      }),
+      ...asArray(research.caseStudies).map((item) => {
+        const safe = asObject(item);
+        return { type: "Research", title: safe.title || "Research case", body: safe.question || "", tags: [safe.discipline || ""] };
+      }),
+      ...asArray(dossiers.dossiers).map((item) => {
+        const safe = asObject(item);
+        return { type: "Dossier", title: safe.title || "Dossier", body: safe.abstract || "", tags: asArray(safe.keywords) };
+      }),
+      ...asArray(materials.materials).map((item) => {
+        const safe = asObject(item);
+        return { type: "Material", title: safe.name || "Material", body: safe.synthesis || "", tags: [safe.family || ""] };
+      })
     ].filter((item) => !term || `${item.type} ${item.title} ${item.body} ${item.tags.join(" ")}`.toLowerCase().includes(term)).slice(0, 12);
-    const queue = payload.workbench?.evidenceQueue || [];
-    const sources = payload.external?.sources || [];
+    const queue = asArray(payload?.workbench?.evidenceQueue);
+    const sources = asArray(payload?.external?.sources);
 
     return h("section", { className: "react-view-grid" }, [
       h("div", { className: "react-record-column", key: "list" }, [
@@ -22,8 +41,8 @@
           ]),
           h("strong", { key: "count" }, `${cards.length} panels`)
         ]),
-        ...cards.map((item) => h(C.PanelCard, {
-          key: `${item.type}-${item.title}`,
+        ...cards.map((item, index) => h(C.PanelCard, {
+          key: `${item.type}-${item.title || `panel-${index}`}`,
           eyebrow: item.type,
           title: item.title,
           body: item.body,
@@ -34,19 +53,25 @@
         h("span", { className: "eyebrow", key: "eyebrow" }, "reusable inspector"),
         h("h2", { key: "title" }, "Selected Record Panel"),
         h(C.RecordInspector, { record: selectedRecord, key: "inspector" }),
-        h("div", { className: "react-argument-grid", key: "queue" }, queue.map((item) => h("section", { className: "react-data-panel", key: item.id }, [
-          h("span", { className: "eyebrow", key: "eyebrow" }, `${item.domain} · ${item.severity}`),
-          h("h3", { key: "title" }, item.title),
-          h("p", { key: "body" }, item.action)
-        ])))
+        h("div", { className: "react-argument-grid", key: "queue" }, queue.map((item, index) => {
+          const safe = asObject(item);
+          return h("section", { className: "react-data-panel", key: safe.id || `queue-${index}` }, [
+            h("span", { className: "eyebrow", key: "eyebrow" }, `${safe.domain || "Domain"} · ${safe.severity || "info"}`),
+            h("h3", { key: "title" }, safe.title || "Workbench item"),
+            h("p", { key: "body" }, safe.action || "")
+          ]);
+        }))
       ]),
       h("aside", { className: "react-side-stack", key: "side" }, h("section", { className: "react-data-panel" }, [
         h("span", { className: "eyebrow", key: "eyebrow" }, "external source panels"),
         h("h3", { key: "title" }, "Academic Handoff"),
-        ...sources.map((source) => h("article", { className: "react-mini-record", key: source.id }, [
-          h("strong", { key: "name" }, source.name),
-          h("p", { key: "scope" }, source.bestFor || source.scope)
-        ]))
+        ...sources.map((source, index) => {
+          const item = asObject(source);
+          return h("article", { className: "react-mini-record", key: item.id || `source-${index}` }, [
+            h("strong", { key: "name" }, item.name || "External source"),
+            h("p", { key: "scope" }, item.bestFor || item.scope || "")
+          ]);
+        })
       ]))
     ]);
   }

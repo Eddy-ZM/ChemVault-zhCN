@@ -1,22 +1,28 @@
 (function () {
   const h = React.createElement;
   const C = window.ChemVaultReact;
+  const asArray = (value) => Array.isArray(value) ? value : [];
+  const asObject = (value) => (value && typeof value === "object" ? value : {});
+  const asString = (value) => String(value || "").toLowerCase();
 
   function lower(value) {
-    return String(value || "").toLowerCase();
+    return asString(value);
   }
 
   function MoleculeExplorer({ payload, query, onSelect }) {
     const [axis, setAxis] = React.useState("reagents");
     const [selectedKey, setSelectedKey] = React.useState("");
+    const chem = asObject(payload?.chem);
+    const materials = asObject(payload?.materials);
     const axes = [
-      { id: "reagents", label: "Reagents", rows: payload.chem?.reagents || [] },
-      { id: "compounds", label: "Compounds", rows: payload.chem?.compounds || [] },
-      { id: "materials", label: "Materials", rows: payload.materials?.materials || [] },
-      { id: "mechanisms", label: "Mechanisms", rows: payload.chem?.mechanisms || [] }
+      { id: "reagents", label: "Reagents", rows: asArray(chem.reagents) },
+      { id: "compounds", label: "Compounds", rows: asArray(chem.compounds) },
+      { id: "materials", label: "Materials", rows: asArray(materials.materials) },
+      { id: "mechanisms", label: "Mechanisms", rows: asArray(chem.mechanisms) }
     ];
     const activeAxis = axes.find((item) => item.id === axis) || axes[0];
-    const rows = activeAxis.rows.filter((item) => {
+    const rows = asArray(activeAxis.rows).filter((rawItem) => {
+      const item = asObject(rawItem);
       const text = lower([
         item.name,
         item.formula,
@@ -27,45 +33,51 @@
         item.summary,
         item.synthesis,
         item.mechanism,
-        ...(item.tags || []),
-        ...(item.applications || []),
-        ...(item.properties || []),
-        ...(item.characterization || []),
-        ...(item.bestFor || [])
+        ...asArray(item.tags),
+        ...asArray(item.applications),
+        ...asArray(item.properties),
+        ...asArray(item.characterization),
+        ...asArray(item.bestFor)
       ].join(" "));
       return !query || text.includes(lower(query));
     }).slice(0, 80);
-    const selected = rows.find((item) => rowKey(item) === selectedKey) || rows[0];
+    const selected = rows.find((item) => rowKey(item) === selectedKey) || rows[0] || null;
 
     React.useEffect(() => {
       if (!rows.some((item) => rowKey(item) === selectedKey)) setSelectedKey(rows[0] ? rowKey(rows[0]) : "");
     }, [query, axis, rows.length]);
 
     function rowKey(item) {
-      return item.id || item.name || item.term || item.formula;
+      const safe = asObject(item);
+      return safe.id || safe.name || safe.term || safe.formula || "";
     }
 
     function title(item) {
-      return item.name || item.term || item.title || item.formula || "Untitled record";
+      const safe = asObject(item);
+      return safe.name || safe.term || safe.title || safe.formula || "Untitled record";
     }
 
     function eyebrow(item) {
-      return item.category || item.family || item.className || activeAxis.label;
+      const safe = asObject(item);
+      return safe.category || safe.family || safe.className || (activeAxis ? activeAxis.label : "Record");
     }
 
     function body(item) {
-      return item.focus || item.summary || item.synthesis || item.mechanism || item.definition || "";
+      const safe = asObject(item);
+      return safe.focus || safe.summary || safe.synthesis || safe.mechanism || safe.definition || "";
     }
 
     function tags(item) {
-      return [item.formula, ...(item.tags || []), ...(item.applications || []), ...(item.bestFor || [])].filter(Boolean);
+      const safe = asObject(item);
+      return [safe.formula, ...asArray(safe.tags), ...asArray(safe.applications), ...asArray(safe.bestFor)].filter(Boolean);
     }
 
     function choose(item) {
       setSelectedKey(rowKey(item));
+      const safe = asObject(item);
       onSelect({
         id: rowKey(item),
-        type: activeAxis.label.replace(/s$/, ""),
+        type: (activeAxis.label || "").replace(/s$/, ""),
         title: title(item),
         body: body(item),
         tags: tags(item).slice(0, 6)
@@ -93,7 +105,7 @@
           eyebrow: eyebrow(item),
           title: title(item),
           body: body(item),
-          meta: item.formula || item.cas || item.risk || "",
+          meta: asObject(item).formula || asObject(item).cas || asObject(item).risk || "",
           tags: tags(item),
           onSelect: () => choose(item)
         }))
@@ -103,10 +115,10 @@
         h("h2", { key: "title" }, title(selected)),
         h("p", { key: "body" }, body(selected)),
         h("div", { className: "react-argument-grid", key: "grid" }, [
-          h(C.DataPanel, { key: "a", title: "Transformations", items: selected.transformations || selected.applications || selected.bestFor || [] }),
-          h(C.DataPanel, { key: "b", title: "Conditions or Properties", items: selected.conditions || selected.properties || [] }),
-          h(C.DataPanel, { key: "c", title: "Mechanism or Evidence", items: [selected.mechanism || selected.evidenceLevel || selected.rateLaw || selected.evidenceNote || "Evidence note not supplied."] }),
-          h(C.DataPanel, { key: "d", title: "Traps and Limitations", items: selected.traps || selected.limitations || [] })
+          h(C.DataPanel, { key: "a", title: "Transformations", items: asArray(selected?.transformations || selected?.applications || selected?.bestFor) }),
+          h(C.DataPanel, { key: "b", title: "Conditions or Properties", items: asArray(selected?.conditions || selected?.properties) }),
+          h(C.DataPanel, { key: "c", title: "Mechanism or Evidence", items: [asObject(selected).mechanism || asObject(selected).evidenceLevel || asObject(selected).rateLaw || asObject(selected).evidenceNote || "Evidence note not supplied."] }),
+          h(C.DataPanel, { key: "d", title: "Traps and Limitations", items: asArray(selected?.traps || selected?.limitations) })
         ])
       ] : null),
       h("aside", { className: "react-side-stack", key: "side" }, h("section", { className: "react-data-panel" }, [
@@ -114,7 +126,7 @@
         h("h3", { key: "title" }, "Active Dataset"),
         h("div", { className: "react-ledger", key: "rows" }, axes.map((item) => h("div", { key: item.id }, [
           h("span", { key: "label" }, item.label),
-          h("strong", { key: "count" }, item.rows.length)
+          h("strong", { key: "count" }, asArray(item.rows).length)
         ])))
       ]))
     ]);

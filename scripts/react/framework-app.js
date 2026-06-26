@@ -58,7 +58,13 @@
 
     React.useEffect(() => {
       const hydrate = (json, source) => {
-        setPayload(json);
+        const normalized = normalisePayload(json);
+        if (!normalized) {
+          setError("Failed to normalise chemistry dataset payload.");
+          setLoading(false);
+          return;
+        }
+        setPayload(normalized);
         setDataSource(source);
         const params = new URLSearchParams(location.search);
         setQuery(params.get("q") || "");
@@ -202,10 +208,9 @@
 
   function payloadFromRuntime() {
     const chem = window.CHEMVAULT_DATA;
-    if (!chem?.reactionSystems && !chem?.compounds) return null;
-    return {
+    if (!chem || typeof chem !== "object") return null;
+    return normalisePayload({
       version: "0.2.4",
-      generatedAt: new Date().toISOString(),
       chem,
       research: window.CHEMVAULT_RESEARCH || {},
       dossiers: window.CHEMVAULT_DOSSIERS || {},
@@ -214,6 +219,68 @@
       materials: window.CHEMVAULT_MATERIALS || {},
       external: window.CHEMVAULT_EXTERNAL || {},
       workbench: window.CHEMVAULT_WORKBENCH || {}
+    });
+  }
+
+  function normalisePayload(json) {
+    if (!json || typeof json !== "object") return null;
+
+    const asArray = (value) => (Array.isArray(value) ? value : []);
+    const asObject = (value) => (value && typeof value === "object" ? value : {});
+
+    const chem = asObject(json.chem);
+    const research = asObject(json.research);
+    const dossiers = asObject(json.dossiers);
+    const methods = asObject(json.methods);
+    const spectroscopy = asObject(json.spectroscopy);
+    const materials = asObject(json.materials);
+    const external = asObject(json.external);
+    const workbench = asObject(json.workbench);
+
+    return {
+      version: json.version || "0.2.4",
+      generatedAt: json.generatedAt || new Date().toISOString(),
+      chem: {
+        ...chem,
+        reactionSystems: asArray(chem.reactionSystems),
+        reactants: asArray(chem.reactants),
+        compounds: asArray(chem.compounds),
+        compoundsIndex: asObject(chem.compoundsIndex),
+        routes: asArray(chem.routes),
+        mechanisms: asArray(chem.mechanisms),
+        concepts: asArray(chem.concepts),
+        conceptsIndex: asObject(chem.conceptsIndex),
+        sources: asArray(chem.sources),
+        sourcesIndex: asObject(chem.sourcesIndex)
+      },
+      research: {
+        ...research,
+        caseStudies: asArray(research.caseStudies)
+      },
+      dossiers: {
+        ...dossiers,
+        dossiers: asArray(dossiers.dossiers)
+      },
+      methods: {
+        ...methods,
+        protocols: asArray(methods.protocols)
+      },
+      spectroscopy: {
+        ...spectroscopy,
+        cases: asArray(spectroscopy.cases)
+      },
+      materials: {
+        ...materials,
+        materials: asArray(materials.materials)
+      },
+      external: {
+        ...external,
+        sources: asArray(external.sources)
+      },
+      workbench: {
+        ...workbench,
+        evidenceQueue: asArray(workbench.evidenceQueue)
+      }
     };
   }
 

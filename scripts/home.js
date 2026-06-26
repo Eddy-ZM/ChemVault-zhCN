@@ -6,8 +6,11 @@
 
   const $ = (selector) => document.querySelector(selector);
   const encode = (value) => encodeURIComponent((value || "").trim());
-  const normalise = (value) => String(value || "").toLowerCase();
+  const normalise = (value) => String(value || "").normalize("NFKC").toLowerCase();
   const searchIntent = () => window.CHEMVAULT_SEARCH_INTENT;
+  let localIndexCache = null;
+  let homeSearchFrame = 0;
+  let shellSearchFrame = 0;
 
   const count = (items) => Array.isArray(items) ? items.length : 0;
   const typeKey = (record, index) => `${record.type || record.typeLabel || "record"}:${record.id || record.title || index}`;
@@ -68,7 +71,8 @@
     if (options.persist !== false) localStorage.setItem("chemvault-theme", setting);
     document.querySelector("meta[name='theme-color']")?.setAttribute("content", dark ? "#101114" : "#f5f5f7");
     document.querySelectorAll("[data-shell-action='theme'], [data-home-action='theme']").forEach((button) => {
-      button.dataset.themeState = setting;
+      button.dataset.themeSetting = setting;
+      button.dataset.themeState = mode;
       button.dataset.themeResolved = mode;
       button.setAttribute("aria-label", themeLabel(setting, mode));
       button.setAttribute("title", themeTitle(setting, mode));
@@ -105,20 +109,15 @@
   }
 
   function nextThemeSetting(setting) {
-    const normalised = normaliseTheme(setting);
-    if (normalised === "system") return resolveTheme("system") === "dark" ? "light" : "dark";
-    return normalised === "light" ? "dark" : "system";
+    return resolveTheme(normaliseTheme(setting)) === "dark" ? "light" : "dark";
   }
 
   function themeLabel(setting, mode) {
-    if (setting === "system") return `系统主题，当前为${mode === "dark" ? "深色" : "浅色"}。切换为${mode === "dark" ? "浅色" : "深色"}主题`;
-    if (setting === "light") return "浅色主题。切换为深色主题";
-    return "深色主题。切换为系统主题";
+    return `${mode === "dark" ? "深色" : "浅色"}主题已启用。切换为${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function themeTitle(setting, mode) {
-    if (setting === "system") return `系统主题（${mode === "dark" ? "深色" : "浅色"}）`;
-    return setting === "light" ? "浅色主题" : "深色主题";
+    return `切换为${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function normalisePath(pathname) {
@@ -171,9 +170,11 @@
   }
 
   function localIndex() {
+    if (localIndexCache) return localIndexCache;
+
     const records = window.CHEMVAULT_RECORDS;
     if (records?.buildRecords) {
-      return records.buildRecords({ includeImported: true }).map((item) => ({
+      const rows = records.buildRecords({ includeImported: true }).map((item) => ({
         id: item.id,
         recordType: item.type,
         type: item.typeLabel || item.type,
@@ -189,12 +190,14 @@
         raw: item.raw || {},
         searchText: item.searchText || ""
       }));
+      localIndexCache = rows.map((item) => ({ ...item, searchableText: localSearchText(item) }));
+      return localIndexCache;
     }
     const rows = [];
     (data.reagents || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "reagent",
-      type: "Reagent dossier",
+      type: "试剂档案",
       title: item.name,
       body: [item.category, item.use, item.mechanism].filter(Boolean).join(" | "),
       formula: item.formula,
@@ -205,7 +208,7 @@
     (data.reactionSystems || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "reaction",
-      type: "Reaction system",
+      type: "反应体系",
       title: item.name,
       body: [item.className, item.domain, ...(item.conditions || []), ...(item.readouts || [])].filter(Boolean).join(" | "),
       tags: [item.domain, ...(item.substrates || []), ...(item.reagents || []), ...(item.mechanisms || [])].filter(Boolean),
@@ -214,7 +217,7 @@
     (data.reactants || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "reactant",
-      type: "Reactant class",
+      type: "反应物类别",
       title: item.name,
       body: [item.className, ...(item.functionalGroups || []), ...(item.compatibleMethods || [])].filter(Boolean).join(" | "),
       tags: [...(item.functionalGroups || []), ...(item.compatibleMethods || [])],
@@ -223,7 +226,7 @@
     (data.compounds || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "compound",
-      type: "Compound record",
+      type: "化合物记录",
       title: item.name,
       body: [item.formula, item.family, item.summary, ...(item.synonyms || [])].filter(Boolean).join(" | "),
       formula: item.formula,
@@ -233,7 +236,7 @@
     (materialsData.materials || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "material",
-      type: "Material profile",
+      type: "材料记录",
       title: item.name,
       body: [item.family, item.summary, (item.applications || []).slice(0, 2).join(", ")].filter(Boolean).join(" | "),
       formula: item.formula,
@@ -243,7 +246,7 @@
     (data.mechanisms || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "mechanism",
-      type: "Mechanism atlas",
+      type: "机理图谱",
       title: item.name,
       body: [item.summary, (item.tags || []).join(", ")].filter(Boolean).join(" | "),
       tags: item.tags || [],
@@ -252,13 +255,14 @@
     (data.concepts || []).forEach((item) => rows.push({
       id: item.id,
       recordType: "concept",
-      type: "Concept note",
+      type: "概念笔记",
       title: item.term,
       body: item.definition,
       tags: item.tags || [],
       href: `pages/library.html?q=${encode(item.term)}`
     }));
-    return rows;
+    localIndexCache = rows.map((item) => ({ ...item, searchableText: localSearchText(item) }));
+    return localIndexCache;
   }
 
   function renderMetrics() {
@@ -357,7 +361,7 @@
     const label = $("#backendStatusLabel");
     const mode = $("#backendStatusMode");
     const list = $("#backendStatusList");
-    const setStatus = (items, code = "本地备用") => {
+    const setStatus = (items, code = "local fallback") => {
       if (label) label.textContent = items[0] || "本地备用数据";
       if (mode) mode.textContent = code;
       if (list) list.innerHTML = items.map((item) => `<span>${escapeHTML(item)}</span>`).join("");
@@ -373,7 +377,7 @@
       const items = [];
       if (health.backend === "d1" || health.features?.d1) items.push("D1 已连接");
       else items.push("本地备用数据");
-      if (health.features?.academicEnrichment) items.push("学术来源补充可用");
+      if (health.features?.academicEnrichment) items.push("学术增强可用");
       setStatus(items, health.backend === "d1" ? "D1" : "本地备用");
     } catch {
       setStatus(["本地备用数据"], "API 不可用");
@@ -390,7 +394,7 @@
     const gateway = $("#externalGateway");
     if (!gateway) return;
     gateway.innerHTML = external.sources.map((source) => `
-      <a class="external-source-card" href="${externalUrl(source, query)}" target="_blank" rel="noreferrer">
+      <a class="external-source-card" href="${externalUrl(source, query)}" target="_blank" rel="noopener noreferrer">
         <span class="eyebrow">${source.owner}</span>
         <strong>${source.name}</strong>
         <span>${source.scope}</span>
@@ -430,7 +434,7 @@
 
     (searchIntent()?.rank?.(query, index, { limit }) || []).forEach((match) => addHit(match.item));
     index
-      .filter((item) => localSearchText(item).includes(term))
+      .filter((item) => item.searchableText.includes(term))
       .slice(0, limit)
       .forEach(addHit);
     return hits.slice(0, limit);
@@ -443,7 +447,7 @@
     if (!term) {
       panel.innerHTML = `
         <a href="pages/reagents.html">浏览试剂档案</a>
-        <a href="pages/materials.html">浏览材料资料</a>
+        <a href="pages/materials.html">浏览材料记录</a>
         <a href="pages/search.html">打开学术检索</a>
       `;
       return;
@@ -458,9 +462,9 @@
       </a>
     `).join("");
     panel.innerHTML = `
-      ${localLinks || `<a href="pages/search.html?q=${encode(query)}">未找到本地预览，打开学术检索。</a>`}
-      <a href="${externalUrl(external.sources[0], query)}" target="_blank" rel="noreferrer">继续在 PubMed 检索</a>
-      <a href="${externalUrl(external.sources[1], query)}" target="_blank" rel="noreferrer">继续在 PubChem 检索</a>
+      ${localLinks || `<a href="pages/search.html?q=${encode(query)}">暂无本地预览匹配，打开学术检索。</a>`}
+      <a href="${externalUrl(external.sources[0], query)}" target="_blank" rel="noopener noreferrer">继续到 PubMed</a>
+      <a href="${externalUrl(external.sources[1], query)}" target="_blank" rel="noopener noreferrer">继续到 PubChem</a>
     `;
     wireImageFallbacks(panel);
   }
@@ -479,8 +483,7 @@
     input.addEventListener("blur", () => {
       window.setTimeout(syncShell, 120);
     });
-    input.addEventListener("input", () => {
-      syncShell();
+    const renderSuggestions = () => {
       const rawQuery = input.value.trim();
       const term = normalise(rawQuery);
       if (!term) {
@@ -491,8 +494,8 @@
 
       const localHits = localHitsFor(rawQuery, 6).map((item) => ({ ...item, external: false }));
       const externalHits = (external.sources || []).slice(0, 4).map((source) => ({
-        type: "External",
-        title: `Search ${source.name}`,
+        type: "外部来源",
+        title: `检索 ${source.name}`,
         body: source.bestFor,
         href: externalUrl(source, rawQuery),
         external: true,
@@ -501,7 +504,7 @@
       const hits = [...localHits, ...externalHits].slice(0, 8);
       panel.classList.add("active");
       panel.innerHTML = hits.length ? hits.map((hit) => `
-        <a class="search-hit" href="${hit.href}"${hit.external ? ' target="_blank" rel="noreferrer"' : ""}>
+        <a class="search-hit" href="${hit.href}"${hit.external ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <img src="${escapeHTML(thumbnailFor(hit))}" data-fallback-src="${escapeHTML(placeholderImage(hit.type, hit.title, hit.formula || hit.family || hit.domain || ""))}" alt="" loading="lazy" referrerpolicy="no-referrer" />
           <span>${escapeHTML(hit.type)}</span>
           <strong>${escapeHTML(hit.title)}</strong>
@@ -509,8 +512,40 @@
         </a>
       `).join("") : `<div class="empty-state">未找到匹配的学术记录。</div>`;
       wireImageFallbacks(panel);
+    };
+
+    input.addEventListener("input", () => {
+      syncShell();
+      if (shellSearchFrame) cancelAnimationFrame(shellSearchFrame);
+      shellSearchFrame = requestAnimationFrame(() => {
+        shellSearchFrame = 0;
+        renderSuggestions();
+      });
     });
     syncShell();
+  }
+
+  function wireHomeSearchInput(input) {
+    const shell = input?.closest(".home-search-input");
+    const clearButton = shell?.querySelector("[data-home-search-clear]");
+    if (!input || !shell || !clearButton) return;
+
+    const syncInputState = () => {
+      const hasValue = Boolean(input.value.trim());
+      shell.classList.toggle("has-value", hasValue);
+      clearButton.hidden = !hasValue;
+    };
+
+    clearButton.addEventListener("click", () => {
+      input.value = "";
+      renderQuickLinks();
+      renderGateway();
+      syncInputState();
+      input.focus();
+    });
+
+    input.addEventListener("input", syncInputState);
+    syncInputState();
   }
 
   function initSearch() {
@@ -527,10 +562,16 @@
       renderQuickLinks();
       renderGateway();
     }
+    wireHomeSearchInput(input);
 
     input.addEventListener("input", () => {
-      renderQuickLinks(input.value);
-      renderGateway(input.value);
+      const queryValue = input.value;
+      if (homeSearchFrame) cancelAnimationFrame(homeSearchFrame);
+      homeSearchFrame = requestAnimationFrame(() => {
+        homeSearchFrame = 0;
+        renderQuickLinks(queryValue);
+        renderGateway(queryValue);
+      });
     });
 
     form.addEventListener("submit", (event) => {
@@ -538,7 +579,7 @@
       const query = input.value.trim();
       const target = query ? `pages/search.html?q=${encode(query)}` : "pages/search.html";
       if (window.CHEMVAULT_MOTION?.navigate) {
-        window.CHEMVAULT_MOTION.navigate(target, "Academic Search");
+        window.CHEMVAULT_MOTION.navigate(target, "学术检索");
         return;
       }
       window.location.href = target;

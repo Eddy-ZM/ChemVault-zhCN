@@ -10,7 +10,7 @@
     "'": "&#39;"
   }[char]));
   const encode = (value) => encodeURIComponent(String(value ?? "").trim());
-  const normalise = (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9.+-]/g, " ");
+  const normalise = (value) => String(value ?? "").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}.+-]/gu, " ");
   const compact = (value) => normalise(value).replace(/\s+/g, " ").trim();
   const pagePrefix = () => location.pathname.includes("/pages/") ? "" : "pages/";
   const recordUrl = (type, id) => `${pagePrefix()}record.html?type=${encode(type)}&id=${encode(id)}`;
@@ -55,7 +55,7 @@
       precautionaryStatements: safety.precautionaryStatements,
       disposalMethod: safety.disposalMethod,
       safetySource: safety.safetySource,
-      imageUrl: input.imageUrl || recordImage(input.typeLabel || input.type, title, input.subtitle || input.family || input.domain || input.formula || "", input),
+      imageUrl: normalizeImageUrl(input.imageUrl || recordImage(input.typeLabel || input.type, title, input.subtitle || input.family || input.domain || input.formula || "", input)),
       searchText,
       href: input.external ? input.href : recordUrl(input.type, input.id)
     };
@@ -90,7 +90,7 @@
       signalWord: input.signalWord || raw.signalWord || signalFromLevel(level),
       precautionaryStatements: unique([...(input.precautionaryStatements || raw.precautionaryStatements || [])]),
       disposalMethod: input.disposalMethod || raw.disposalMethod || disposalFor(input, hazardStatements, level),
-      safetySource: input.safetySource || raw.safetySource || (raw.source === "PubChem" || raw.raw?.source === "PubChem" || input.sourceHref?.includes("pubchem") ? "PubChem GHS summary" : "Local safety summary")
+      safetySource: input.safetySource || raw.safetySource || (raw.source === "PubChem" || raw.raw?.source === "PubChem" || input.sourceHref?.includes("pubchem") ? "PubChem GHS 摘要" : "本地安全摘要")
     };
   }
 
@@ -101,41 +101,41 @@
   }
 
   function fallbackHazardStatement(input, level) {
-    if (level === "Not classified") return "No local GHS hazard statement is currently classified for this record; verify the current SDS before use.";
-    if (input.risk === "corrosive") return "Corrosive material or reagent system; may cause burns or serious eye damage depending on concentration.";
-    if (input.risk === "oxidizer") return "Oxidizing material or reagent system; may intensify fire and react with incompatible reducing or organic materials.";
-    if (input.risk === "dry") return "Moisture-sensitive or reactive material; contact with water, air or protic media may create additional hazards.";
-    if (input.risk === "toxic") return "Toxic material or reagent system; avoid exposure and verify route-specific hazards from the SDS.";
-    if (input.risk === "energetic") return "Potential energetic or instability hazard; avoid heat, friction, impact and incompatible storage conditions.";
-    return "Hazard statement not fully classified in local data; verify the current SDS before handling.";
+    if (level === "未分类") return "本地数据尚未为该记录归类 GHS 危害声明；使用前请核对最新版 SDS。";
+    if (input.risk === "corrosive") return "腐蚀性材料或试剂体系；具体危害随浓度变化，可能导致灼伤或严重眼损伤。";
+    if (input.risk === "oxidizer") return "氧化性材料或试剂体系；可能加剧燃烧，并与还原性或有机材料发生不相容反应。";
+    if (input.risk === "dry") return "对水分或空气敏感的反应性材料；接触水、空气或质子介质可能产生额外危害。";
+    if (input.risk === "toxic") return "有毒材料或试剂体系；避免暴露，并根据 SDS 核对具体暴露途径危害。";
+    if (input.risk === "energetic") return "可能存在能量释放或不稳定风险；避免受热、摩擦、撞击和不相容储存条件。";
+    return "本地数据尚未完整归类危害声明；处理前请核对最新版 SDS。";
   }
 
   function hazardLevelFrom(risk, statements = []) {
     const text = `${risk || ""} ${statements.join(" ")}`.toLowerCase();
-    if (/fatal|cancer|mutagen|reproductive|damage to organs|explosive|pyrophoric|energetic|toxic/.test(text)) return "Severe";
-    if (/corrosive|skin burns|serious eye damage|oxidizer|highly flammable|extremely flammable|dry/.test(text)) return "High";
-    if (/harmful|irritation|drowsiness|dizziness|flammable|standard/.test(text)) return "Moderate";
-    if (/not classified|no local/.test(text)) return "Not classified";
-    return statements.length ? "Low" : "Not classified";
+    if (/fatal|cancer|mutagen|reproductive|damage to organs|explosive|pyrophoric|energetic|toxic/.test(text)) return "严重";
+    if (/corrosive|skin burns|serious eye damage|oxidizer|highly flammable|extremely flammable|dry/.test(text)) return "高";
+    if (/harmful|irritation|drowsiness|dizziness|flammable|standard/.test(text)) return "中等";
+    if (/not classified|no local/.test(text)) return "未分类";
+    return statements.length ? "低" : "未分类";
   }
 
   function signalFromLevel(level) {
-    if (level === "Severe" || level === "High") return "Danger";
-    if (level === "Moderate" || level === "Low") return "Warning";
-    return "Not available";
+    if (level === "严重" || level === "高") return "危险";
+    if (level === "中等" || level === "低") return "警告";
+    return "未记录";
   }
 
   function disposalFor(input, statements = [], level = "") {
     const text = `${input.risk || ""} ${input.family || ""} ${input.category || ""} ${statements.join(" ")}`.toLowerCase();
-    if (/halogen|chloroform|dichloromethane|bromine|iodine/.test(text)) return "Collect as halogenated or toxic hazardous waste in a compatible labelled container; do not pour to drain.";
-    if (/chrom|osmium|lead|mercury|cadmium|nickel|metal|catalyst/.test(text)) return "Collect as heavy-metal or catalyst waste for institutional hazardous-waste pickup.";
-    if (/azide|cyanide|diazonium|energetic|explosive|pyrophoric/.test(text)) return "Collect as reactive/toxic hazardous waste and keep segregated under institutional EHS guidance.";
-    if (/corrosive|acid|base|skin burns|serious eye damage/.test(text)) return "Collect as corrosive hazardous waste or neutralize only under an approved institutional procedure.";
-    if (/solvent|flammable|ether|toluene|hexane|acetone|ethanol|methanol|acetonitrile|tetrahydrofuran|ethyl acetate|dimethylformamide/.test(text) && !/oxidizer|hypochlorite|permanganate|nitrate|may intensify fire/.test(text)) return "Collect in a compatible flammable organic-waste container; keep ignition sources excluded and do not pour to drain.";
-    if (/oxidizer|peroxide|hypochlorite|permanganate|nitrate/.test(text)) return "Collect as oxidizing hazardous waste; keep separate from organics, reducers and incompatible containers.";
-    if (/flammable|solvent|ether|toluene|hexane|acetone|ethanol|methanol/.test(text)) return "Collect in a compatible flammable organic-waste container; keep ignition sources excluded and do not pour to drain.";
-    if (level === "Not classified") return "Use local non-hazardous or aqueous-waste rules only after checking the current SDS and institutional policy.";
-    return "Dispose through approved chemical-waste channels according to SDS, institutional EHS guidance and local regulations.";
+    if (/halogen|chloroform|dichloromethane|bromine|iodine/.test(text)) return "按卤代或有毒危险废物收集到兼容且有标签的容器中；不得倒入下水道。";
+    if (/chrom|osmium|lead|mercury|cadmium|nickel|metal|catalyst/.test(text)) return "按重金属或催化剂废物收集，并交由机构危险废物流程处理。";
+    if (/azide|cyanide|diazonium|energetic|explosive|pyrophoric/.test(text)) return "按反应性或有毒危险废物收集，并依据机构 EHS 要求隔离保存。";
+    if (/corrosive|acid|base|skin burns|serious eye damage/.test(text)) return "按腐蚀性危险废物收集；仅在机构批准流程下进行中和处理。";
+    if (/solvent|flammable|ether|toluene|hexane|acetone|ethanol|methanol|acetonitrile|tetrahydrofuran|ethyl acetate|dimethylformamide/.test(text) && !/oxidizer|hypochlorite|permanganate|nitrate|may intensify fire/.test(text)) return "收集到兼容的可燃有机废液容器中，远离火源，且不得倒入下水道。";
+    if (/oxidizer|peroxide|hypochlorite|permanganate|nitrate/.test(text)) return "按氧化性危险废物收集，并与有机物、还原剂和不兼容容器分开。";
+    if (/flammable|solvent|ether|toluene|hexane|acetone|ethanol|methanol/.test(text)) return "收集到兼容的可燃有机废液容器中，远离火源，且不得倒入下水道。";
+    if (level === "未分类") return "仅在核对当前 SDS 和机构政策后，才按本地非危险或水相废物规则处理。";
+    return "依据 SDS、机构 EHS 要求和本地法规，通过批准的化学废物渠道处理。";
   }
 
   function buildRecords(options = {}) {
@@ -155,7 +155,7 @@
     (data.reactionSystems || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "reaction",
-      typeLabel: "Reaction system",
+      typeLabel: "反应体系",
       title: item.name,
       subtitle: item.className,
       body: [item.domain, ...(item.conditions || []), ...(item.readouts || []), ...(item.limitations || [])].join(" | "),
@@ -164,13 +164,13 @@
       tags: [item.domain, ...(item.substrates || []), ...(item.reagents || []), ...(item.mechanisms || [])],
       sourceHref: originalUrl("workbench.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Reactant classes", items: (item.substrates || []).map((id) => lookupName(data.reactants, id)) },
-        { title: "Reagent links", items: (item.reagents || []).map((id) => lookupName(data.reagents, id)) },
-        { title: "Mechanism links", items: (item.mechanisms || []).map((id) => lookupName(data.mechanisms, id)) },
-        { title: "Typical conditions", items: item.conditions || [] },
-        { title: "Readouts", items: item.readouts || [] },
-        { title: "Limitations", items: item.limitations || [] },
-        { title: "Next questions", items: item.nextQuestions || [] }
+        { title: "反应物类别", items: (item.substrates || []).map((id) => lookupName(data.reactants, id)) },
+        { title: "关联试剂", items: (item.reagents || []).map((id) => lookupName(data.reagents, id)) },
+        { title: "关联机理", items: (item.mechanisms || []).map((id) => lookupName(data.mechanisms, id)) },
+        { title: "典型条件", items: item.conditions || [] },
+        { title: "读出指标", items: item.readouts || [] },
+        { title: "局限性", items: item.limitations || [] },
+        { title: "后续问题", items: item.nextQuestions || [] }
       ],
       raw: item
     })));
@@ -178,7 +178,7 @@
     (data.reactants || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "reactant",
-      typeLabel: "Reactant class",
+      typeLabel: "反应物类别",
       title: item.name,
       subtitle: item.className,
       body: [...(item.functionalGroups || []), ...(item.compatibleMethods || []), ...(item.constraints || [])].join(" | "),
@@ -186,9 +186,9 @@
       tags: [...(item.functionalGroups || []), ...(item.compatibleMethods || [])],
       sourceHref: originalUrl("workbench.html", `q=${encode(item.name)}`),
       sections: [
-        { title: "Functional groups", items: item.functionalGroups || [] },
-        { title: "Compatible methods", items: item.compatibleMethods || [] },
-        { title: "Constraints", items: item.constraints || [] }
+        { title: "官能团", items: item.functionalGroups || [] },
+        { title: "兼容方法", items: item.compatibleMethods || [] },
+        { title: "约束条件", items: item.constraints || [] }
       ],
       raw: item
     })));
@@ -196,7 +196,7 @@
     (data.reagents || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "reagent",
-      typeLabel: "Reagent",
+      typeLabel: "试剂",
       title: item.name,
       subtitle: [item.formula, item.focus].filter(Boolean).join(" · "),
       body: [item.category, item.use, item.mechanism, item.scope, item.safety, item.hazards].filter(Boolean).join(" | "),
@@ -208,12 +208,12 @@
       tags: item.tags || [],
       sourceHref: originalUrl("reagents.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Transformations", items: item.transformations || [] },
-        { title: "Conditions", items: item.conditions || [] },
-        { title: "Scope", items: [item.scope || item.academicUse].filter(Boolean) },
-        { title: "Mechanistic note", items: [item.mechanism].filter(Boolean) },
-        { title: "Traps and limitations", items: item.traps || [] },
-        { title: "Safety and evidence", items: [item.safety, item.evidenceNote, item.hazards].filter(Boolean) }
+        { title: "转化类型", items: item.transformations || [] },
+        { title: "条件", items: item.conditions || [] },
+        { title: "适用范围", items: [item.scope || item.academicUse].filter(Boolean) },
+        { title: "机理说明", items: [item.mechanism].filter(Boolean) },
+        { title: "陷阱与局限", items: item.traps || [] },
+        { title: "安全与证据", items: [item.safety, item.evidenceNote, item.hazards].filter(Boolean) }
       ],
       raw: item
     })));
@@ -221,7 +221,7 @@
     (data.compounds || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "compound",
-      typeLabel: "Compound",
+      typeLabel: "化合物",
       title: item.name,
       subtitle: [item.formula, item.family].filter(Boolean).join(" · "),
       body: [item.summary, item.evidenceNote, item.cas].filter(Boolean).join(" | "),
@@ -231,9 +231,9 @@
       tags: [...(item.synonyms || []), ...(item.tags || [])],
       sourceHref: originalUrl("search.html", `q=${encode(item.name)}`),
       sections: [
-        { title: "Identifiers", items: [item.formula, item.cas, ...(item.synonyms || [])].filter(Boolean) },
-        { title: "Summary", items: [item.summary].filter(Boolean) },
-        { title: "Evidence note", items: [item.evidenceNote].filter(Boolean) }
+        { title: "标识符", items: [item.formula, item.cas, ...(item.synonyms || [])].filter(Boolean) },
+        { title: "摘要", items: [item.summary].filter(Boolean) },
+        { title: "证据说明", items: [item.evidenceNote].filter(Boolean) }
       ],
       raw: item
     })));
@@ -241,7 +241,7 @@
     (materialsData.materials || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "material",
-      typeLabel: "Material",
+      typeLabel: "材料",
       title: item.name,
       subtitle: [item.formula, item.family].filter(Boolean).join(" · "),
       body: [item.summary, item.synthesis, item.evidenceLevel].filter(Boolean).join(" | "),
@@ -251,12 +251,12 @@
       tags: [...(item.tags || []), ...(item.applications || []), ...(item.characterization || [])],
       sourceHref: originalUrl("materials.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Applications", items: item.applications || [] },
-        { title: "Properties", items: item.properties || [] },
-        { title: "Synthesis", items: [item.synthesis].filter(Boolean) },
-        { title: "Characterization", items: item.characterization || [] },
-        { title: "Limitations", items: item.limitations || [] },
-        { title: "Evidence level", items: [item.evidenceLevel].filter(Boolean) }
+        { title: "应用", items: item.applications || [] },
+        { title: "性质", items: item.properties || [] },
+        { title: "合成", items: [item.synthesis].filter(Boolean) },
+        { title: "表征", items: item.characterization || [] },
+        { title: "局限性", items: item.limitations || [] },
+        { title: "证据等级", items: [item.evidenceLevel].filter(Boolean) }
       ],
       raw: item
     })));
@@ -264,15 +264,15 @@
     (data.routes || []).forEach((item) => records.push(makeRecord({
       id: routeId(item),
       type: "route",
-      typeLabel: "Route",
+      typeLabel: "路线",
       title: `${item.start} to ${item.target}`,
-      subtitle: "Synthetic route",
+      subtitle: "合成路线",
       body: [item.note, ...(item.route || [])].join(" | "),
       tags: [item.start, item.target, ...(item.route || [])],
       sourceHref: originalUrl("library.html", `q=${encode(`${item.start} ${item.target}`)}`),
       sections: [
-        { title: "Route steps", items: item.route || [] },
-        { title: "Evidence note", items: [item.note].filter(Boolean) }
+        { title: "路线步骤", items: item.route || [] },
+        { title: "证据说明", items: [item.note].filter(Boolean) }
       ],
       raw: item
     })));
@@ -280,7 +280,7 @@
     (data.mechanisms || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "mechanism",
-      typeLabel: "Mechanism",
+      typeLabel: "机理",
       title: item.name,
       subtitle: item.className,
       body: [item.summary, item.rateLaw, item.stereo].filter(Boolean).join(" | "),
@@ -288,10 +288,10 @@
       tags: [...(item.tags || []), ...(item.bestFor || [])],
       sourceHref: originalUrl("atlas.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Summary", items: [item.summary].filter(Boolean) },
-        { title: "Steps", items: item.steps || [] },
-        { title: "Best for", items: item.bestFor || [] },
-        { title: "Rate law and stereochemistry", items: [item.rateLaw, item.stereo].filter(Boolean) }
+        { title: "摘要", items: [item.summary].filter(Boolean) },
+        { title: "步骤", items: item.steps || [] },
+        { title: "适合场景", items: item.bestFor || [] },
+        { title: "速率律与立体化学", items: [item.rateLaw, item.stereo].filter(Boolean) }
       ],
       raw: item
     })));
@@ -299,7 +299,7 @@
     (data.concepts || []).forEach((item) => records.push(makeRecord({
       id: item.id || slug(item.term),
       type: "concept",
-      typeLabel: "Concept",
+      typeLabel: "概念",
       title: item.term,
       subtitle: item.family,
       body: [item.definition, item.equation, item.evidenceNote].filter(Boolean).join(" | "),
@@ -307,9 +307,9 @@
       tags: item.tags || [],
       sourceHref: originalUrl("library.html", `q=${encode(item.term)}`),
       sections: [
-        { title: "Definition", items: [item.definition].filter(Boolean) },
-        { title: "Equation", items: [item.equation].filter(Boolean) },
-        { title: "Evidence note", items: [item.evidenceNote].filter(Boolean) }
+        { title: "定义", items: [item.definition].filter(Boolean) },
+        { title: "方程", items: [item.equation].filter(Boolean) },
+        { title: "证据说明", items: [item.evidenceNote].filter(Boolean) }
       ],
       raw: item
     })));
@@ -317,7 +317,7 @@
     (data.sources || []).forEach((item) => records.push(makeRecord({
       id: item.id || slug(item.short),
       type: "source",
-      typeLabel: "Source",
+      typeLabel: "来源",
       title: item.short,
       subtitle: item.family,
       body: [item.title, item.note].filter(Boolean).join(" | "),
@@ -327,8 +327,8 @@
       external: Boolean(item.href || item.url),
       sourceHref: originalUrl("library.html", `q=${encode(item.short)}`),
       sections: [
-        { title: "Source title", items: [item.title].filter(Boolean) },
-        { title: "Use note", items: [item.note].filter(Boolean) }
+        { title: "来源标题", items: [item.title].filter(Boolean) },
+        { title: "使用说明", items: [item.note].filter(Boolean) }
       ],
       raw: item
     })));
@@ -336,7 +336,7 @@
     (research.caseStudies || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "research-case",
-      typeLabel: "Research case",
+      typeLabel: "研究案例",
       title: item.title,
       subtitle: item.discipline,
       body: [item.abstract, item.question, item.thesis].filter(Boolean).join(" | "),
@@ -344,11 +344,11 @@
       tags: item.tags || [],
       sourceHref: originalUrl("research.html", `case=${encode(item.id)}`),
       sections: [
-        { title: "Question", items: [item.question].filter(Boolean) },
-        { title: "Thesis", items: [item.thesis].filter(Boolean) },
-        { title: "Evidence", items: item.evidence || [] },
-        { title: "Techniques", items: item.techniques || [] },
-        { title: "Limitations", items: item.limitations || [] }
+        { title: "问题", items: [item.question].filter(Boolean) },
+        { title: "论点", items: [item.thesis].filter(Boolean) },
+        { title: "证据", items: item.evidence || [] },
+        { title: "技术", items: item.techniques || [] },
+        { title: "局限性", items: item.limitations || [] }
       ],
       raw: item
     })));
@@ -356,7 +356,7 @@
     (dossiers.dossiers || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "dossier",
-      typeLabel: "Dossier",
+      typeLabel: "档案",
       title: item.title,
       subtitle: [item.field, item.status].filter(Boolean).join(" · "),
       body: [item.summary, item.abstract, ...(item.highlights || []), ...(item.claims || [])].join(" | "),
@@ -364,10 +364,10 @@
       tags: item.tags || item.keywords || [],
       sourceHref: originalUrl("dossiers.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Summary", items: [item.summary || item.abstract].filter(Boolean) },
-        { title: "Highlights", items: item.highlights || [] },
-        { title: "Claims", items: item.claims || [] },
-        { title: "References", items: item.references || [] }
+        { title: "摘要", items: [item.summary || item.abstract].filter(Boolean) },
+        { title: "重点", items: item.highlights || [] },
+        { title: "主张", items: item.claims || [] },
+        { title: "参考文献", items: item.references || [] }
       ],
       raw: item
     })));
@@ -375,7 +375,7 @@
     (methods.protocols || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "method",
-      typeLabel: "Method",
+      typeLabel: "方法",
       title: item.title,
       subtitle: [item.domain, item.level].filter(Boolean).join(" · "),
       body: [item.summary, ...(item.workflow || []), ...(item.qualityControls || [])].join(" | "),
@@ -384,10 +384,10 @@
       tags: item.tags || [],
       sourceHref: originalUrl("methods.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Inputs", items: item.inputs || [] },
-        { title: "Workflow", items: item.workflow || [] },
-        { title: "Outputs", items: item.outputs || [] },
-        { title: "Quality controls", items: item.qualityControls || [] }
+        { title: "输入", items: item.inputs || [] },
+        { title: "工作流", items: item.workflow || [] },
+        { title: "输出", items: item.outputs || [] },
+        { title: "质量控制", items: item.qualityControls || [] }
       ],
       raw: item
     })));
@@ -395,7 +395,7 @@
     (spectroscopy.cases || []).forEach((item) => records.push(makeRecord({
       id: item.id,
       type: "spectroscopy",
-      typeLabel: "Spectroscopy",
+      typeLabel: "谱学",
       title: item.title,
       subtitle: item.family,
       body: [item.summary, item.question, item.conclusion, ...(item.assignments || [])].join(" | "),
@@ -403,10 +403,10 @@
       tags: item.tags || [],
       sourceHref: originalUrl("spectroscopy.html", `id=${encode(item.id)}`),
       sections: [
-        { title: "Question", items: [item.question].filter(Boolean) },
-        { title: "Signals", items: (item.signals || []).map((signal) => `${signal.technique || ""} ${signal.signal || ""} ${signal.interpretation || ""}`.trim()) },
-        { title: "Assignments", items: item.assignments || [] },
-        { title: "Conclusion", items: [item.conclusion].filter(Boolean) }
+        { title: "问题", items: [item.question].filter(Boolean) },
+        { title: "信号", items: (item.signals || []).map((signal) => `${signal.technique || ""} ${signal.signal || ""} ${signal.interpretation || ""}`.trim()) },
+        { title: "归属", items: item.assignments || [] },
+        { title: "结论", items: [item.conclusion].filter(Boolean) }
       ],
       raw: item
     })));
@@ -420,7 +420,7 @@
     getImportedRecords().forEach((item) => records.push(makeRecord({
       id: item.id,
       type: item.type?.toLowerCase().replace(/\s+/g, "-") || "imported",
-      typeLabel: item.type || "Imported record",
+      typeLabel: item.type || "导入记录",
       title: item.title,
       body: item.body,
       tags: item.tags || [],
@@ -428,8 +428,8 @@
       href: item.href,
       importedAt: item.importedAt,
       sections: [
-        { title: "Imported body", items: [item.body].filter(Boolean) },
-        { title: "Session tags", items: item.tags || [] }
+        { title: "导入内容", items: [item.body].filter(Boolean) },
+        { title: "会话标签", items: item.tags || [] }
       ],
       raw: item
     })));
@@ -491,19 +491,52 @@
   }
 
   function recordImage(type, title, subtitle = "", input = {}) {
+    const fallback = placeholderImage(type || "记录", title || "ChemVault", subtitle || "");
     const cid = pubChemCidFrom(input);
     if (cid && canUsePubChemName(title)) {
-      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${encodeURIComponent(cid)}/PNG?record_type=2d&image_size=large`;
+      const image = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${encodeURIComponent(cid)}/PNG?record_type=2d&image_size=large`;
+      return normalizeImageUrl(image) || fallback;
     }
     const key = compact(`${type} ${title}`);
     if ((key.includes("reagent") || key.includes("compound")) && canUsePubChemName(title)) {
-      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(title)}/PNG?record_type=2d&image_size=large`;
+      const cleanTitle = pubChemImageLookupName(title);
+      const image = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(cleanTitle)}/PNG?record_type=2d&image_size=large`;
+      return normalizeImageUrl(image) || fallback;
     }
-    return placeholderImage(type || "Record", title || "ChemVault", subtitle || "");
+    return fallback;
+  }
+
+  function normalizeImageUrl(url) {
+    const value = String(url || "").trim();
+    if (!value) return "";
+    if (/^data:image\//i.test(value)) return value;
+    try {
+      const parsed = value.startsWith("//")
+        ? new URL(`https:${value}`)
+        : new URL(value, window.location.href);
+      if (parsed.protocol === "http:") parsed.protocol = "https:";
+      if (parsed.pathname.includes("/PNG") && /\/compound\//.test(parsed.pathname)) {
+        parsed.searchParams.set("record_type", "2d");
+        if (!parsed.searchParams.get("image_size") || parsed.searchParams.get("image_size") === "small") {
+          parsed.searchParams.set("image_size", "large");
+        }
+      }
+      return parsed.toString();
+    } catch {
+      try {
+        return encodeURI(value);
+      } catch {
+        return "";
+      }
+    }
+  }
+
+  function pubChemImageLookupName(title) {
+    return String(title || "").replace(/^.*[·•]\s*/, "").trim();
   }
 
   function fallbackImage(type, title, subtitle = "") {
-    return placeholderImage(type || "Record", title || "ChemVault", subtitle || "");
+    return placeholderImage(type || "记录", title || "ChemVault", subtitle || "");
   }
 
   function canUsePubChemName(title) {
@@ -544,8 +577,8 @@
     <circle cx="184" cy="138" r="18" fill="${palette.accent2}" stroke="none"/>
     <circle cx="318" cy="16" r="15" fill="${palette.accent}" stroke="none"/>
   </g>
-  <text x="372" y="168" fill="${palette.text}" font-family="SFMono-Regular,Menlo,Consolas,monospace" font-size="36" font-weight="800">${svgEsc(formula || "Chem record").slice(0, 18)}</text>
-  <text x="372" y="206" fill="${palette.muted}" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">curated preview</text>
+  <text x="372" y="168" fill="${palette.text}" font-family="SFMono-Regular,Menlo,Consolas,monospace" font-size="36" font-weight="800">${svgEsc(formula || "化学记录").slice(0, 18)}</text>
+  <text x="372" y="206" fill="${palette.muted}" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">整理预览</text>
   <text x="54" y="338" fill="${palette.text}" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="34" font-weight="850">${svgEsc(title).slice(0, 30)}</text>
   <text x="54" y="370" fill="${palette.muted}" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="19" font-weight="650">${svgEsc(subtitle).slice(0, 48)}</text>
 </svg>`;

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemVault 中文站 | 平台能力</title>
+  <meta name="description" content="ChemVault 平台能力覆盖论文到数据库、化合物检索、实验报告解析、文献图谱和安全科学文件基础设施。" />
+  <meta name="keywords" content="ChemVault platform, 化合物检索, paper to database, chemical entity recognition, literature graph, research workspace" />
+  <meta name="theme-color" content="#07111f" />
+  <script src="/scripts/boot.js?v=20260618c"></script>
+  <meta property="og:title" content="ChemVault 中文站 | 平台能力" />
+  <meta property="og:description" content="ChemVault 平台能力覆盖论文到数据库、化合物检索、实验报告解析、文献图谱和安全科学文件基础设施。" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://chemvault-zh.pages.dev/pages/platform.html" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260622b" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260619c" />
+  <link rel="stylesheet" href="../assets/academic.css?v=20260623mobilefix" />
+  <script src="../data/chem-data.js?v=20260603a" defer></script>
+  <script src="../data/reagent-extension.js?v=20260603a" defer></script>
+  <script src="../data/research-data.js?v=20260603a" defer></script>
+  <script src="../data/dossier-data.js?v=20260603a" defer></script>
+  <script src="../data/method-data.js?v=20260603a" defer></script>
+  <script src="../data/spectroscopy-data.js?v=20260603a" defer></script>
+  <script src="../data/materials-data.js?v=20260603a" defer></script>
+  <script src="../data/database-expansion.js?v=20260603a" defer></script>
+  <script src="../data/reagent-megalibrary.js?v=20260603a" defer></script>
+  <script src="../data/knowledge-expansion.js?v=20260603a" defer></script>
+  <script src="../data/local-catalog-10000.js?v=20260603a" defer></script>
+  <script src="../data/external-sources.js?v=20260603a" defer></script>
+  <script src="../scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="../scripts/search-intent.js?v=20260608a" defer></script>
+  <script src="../scripts/api.js?v=20260603a" defer></script>
+  <script src="../scripts/motion.js?v=20260618c" defer></script>
+  <script src="../scripts/site-shell.js?v=20260623teamnav" defer></script>
+</head>
+<body class="page-shell academic-site academic-page" data-boot-label="平台">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+        <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+      </a>
+      <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="../index.html">首页</a>
+        <a href="research.html">研究</a>
+        <a href="platform.html">平台</a>
+        <a href="projects.html">项目</a>
+        <a href="notes.html">笔记</a>
+        <a href="search.html">化合物</a>
+        <details class="nav-more">
+          <summary>更多</summary>
+          <div class="nav-more-menu">
+            <a href="app.html">应用</a>
+            <a href="workbench.html">工作台</a>
+            <a href="reagents.html">试剂</a>
+            <a href="materials.html">材料</a>
+            <a href="methods.html">方法</a>
+            <a href="dossiers.html">档案</a>
+            <a href="spectroscopy.html">谱学</a>
+            <a href="atlas.html">图谱</a>
+            <a href="library.html">资料库</a>
+            <a href="about.html">关于</a>
+            <a href="filing.html">备案信息</a>
+            <a href="team.html">团队</a>
+            <a href="developer.html">开发者</a>
+            <a href="contact.html">联系</a>
+          </div>
+        </details>
+      </nav>
+      <div class="header-actions">
+        <label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索化合物..." /></label>
+        <button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button>
+      </div>
+    </div>
+    <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
+  </header>
+
+  <main id="main">
+    <section class="academic-page-hero">
+      <div class="container">
+        <div>
+          <span class="section-kicker">平台</span>
+          <h1>平台能力</h1>
+          <p>ChemVault 被设计为模块化研究基础设施平台，服务化学数据、科学文档、化合物信息和 AI 辅助知识工作流。</p>
+        </div>
+        <aside class="page-index-panel">
+          <strong>核心模块</strong>
+          <a href="#compound-search">化合物检索</a>
+          <a href="#paper-to-database">论文到数据库</a>
+          <a href="#literature-graph">文献图谱</a>
+          <a href="#workspace">研究工作区</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="academic-section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">能力架构</span>
+            <h2>共享知识层上的独立模块。</h2>
+          </div>
+          <p>每项能力都可以独立成熟，同时贡献到同一套科学数据模型：实体、来源、方法、主张、观察和项目上下文。</p>
+        </div>
+        <div class="capability-grid">
+          <article class="platform-capability-card" id="compound-search">
+            <span class="status-pill active">可用</span>
+            <h3>化合物检索</h3>
+            <p>用于查询化学名称、分子式、标识符、分子数据和相关化合物信息的快速检索界面。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>面向化学记录的名称、分子式、CAS 风格标识符和 PubChem 相关查询。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>更清晰的化合物元数据、更强的标识符处理，以及从分子记录连接到文档抽取研究证据。</p></div>
+            <div class="capability-meta"><span>化合物检索</span><span>化学</span><span>分子数据</span><span>PubChem</span><span>标识符</span></div>
+            <a class="academic-button dark" href="search.html">打开化合物检索</a>
+          </article>
+          <article class="platform-capability-card" id="paper-to-database">
+            <span class="status-pill prototype">原型</span>
+            <h3>论文到数据库</h3>
+            <p>把非结构化论文、PDF 和报告转化为结构化科学记录。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>抽取化合物、实验变量、方法、表格和来源关联证据。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>可复核的抽取流水线，包含来源引用、置信度信号和可导出的数据库记录。</p></div>
+            <div class="capability-meta"><span>数据抽取</span><span>PDF</span><span>科学记录</span></div>
+          </article>
+          <article class="platform-capability-card">
+            <span class="status-pill prototype">原型</span>
+            <h3>实验报告解析器</h3>
+            <p>把实验报告解析为实体、步骤、条件、观察和结果摘要。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>把实验室笔记转化为可检索实验记录和可重复性检查清单。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>支持结构化步骤捕获、试剂关联、结果表格和可复用实验模板。</p></div>
+            <div class="capability-meta"><span>实验报告</span><span>方法</span><span>实验</span></div>
+          </article>
+          <article class="platform-capability-card">
+            <span class="status-pill prototype">原型</span>
+            <h3>化学实体识别</h3>
+            <p>识别科学文档中的化学名称、分子式、标识符、材料、反应术语和方法短语。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>索引化学感知文档，并把抽取出的提及连接到化合物或方法记录。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>改进名称、分子式、标识符、同义词和上下文特定化学提及之间的实体链接。</p></div>
+            <div class="capability-meta"><span>NER</span><span>标识符</span><span>实体链接</span></div>
+          </article>
+          <article class="platform-capability-card" id="literature-graph">
+            <span class="status-pill concept">概念</span>
+            <h3>文献图谱</h3>
+            <p>连接研究材料中的论文、主张、方法、实体和证据关系。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>构建文献地图、比较相关工作，并把科学主张追踪到来源记录。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>呈现可导航的论文、化合物、方法和主张关系，用于有来源支撑的研究复核。</p></div>
+            <div class="capability-meta"><span>知识图谱</span><span>文献复核</span><span>主张</span></div>
+          </article>
+          <article class="platform-capability-card">
+            <span class="status-pill concept">概念</span>
+            <h3>实验知识库</h3>
+            <p>以结构化形式保存实验上下文、方法、条件、观察、失败和结果。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>为实验科学和可重复工作流维护可复用项目记忆。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>把实验连接到化合物、方案、数据集、阴性结果和项目层解释。</p></div>
+            <div class="capability-meta"><span>实验</span><span>知识库</span><span>可重复性</span></div>
+          </article>
+          <article class="platform-capability-card" id="workspace">
+            <span class="status-pill active">可用</span>
+            <h3>研究工作区</h3>
+            <p>用于浏览和复核本地记录、反应体系、试剂、材料、方法和证据的界面。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>在现有 ChemVault 站点内查看化学记录、来源上下文和交叉链接知识。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>演进为用于笔记、文档、数据集和 AI 辅助研究工作流复核的工作区。</p></div>
+            <div class="capability-meta"><span>工作台</span><span>复核</span><span>化学记录</span></div>
+            <a class="academic-button dark" href="workbench.html">打开工作台</a>
+          </article>
+          <article class="platform-capability-card">
+            <span class="status-pill concept">概念 / 开发中</span>
+            <h3>通知层</h3>
+            <p>连接系统提醒、研究工作流事件和 ChemVault 相关更新。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>协调长时间抽取任务、项目更新和面向用户的研究通知。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>为抽取状态、文件事件、项目发布和研究工作流变化提供可选择提醒。</p></div>
+            <div class="capability-meta"><span>提醒</span><span>工作流事件</span><span>通信</span></div>
+          </article>
+          <article class="platform-capability-card">
+            <span class="status-pill active">可用</span>
+            <h3>安全文件基础设施</h3>
+            <p>用于组织学术材料、实验文件和项目资源的私有层。</p>
+            <div class="capability-use"><strong>使用场景</strong><p>在受控访问后托管项目文件，并将其连接到科学知识工作流。</p></div>
+            <div class="capability-use"><strong>未来方向</strong><p>为研究项目材料附加文件元数据、文档索引和协作访问控制。</p></div>
+            <div class="capability-meta"><span>文件</span><span>Cloudflare Access</span><span>存储</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="academic-section academic-band">
+      <div class="container">
+        <div class="vision-panel">
+          <span class="section-kicker">平台方向</span>
+          <h2>平台用于连接文档抽取、化学检索和研究工作流智能，同时不把公开站点强行变成纯服务器架构。</h2>
+          <p>当前实现保持静态且适合 Cloudflare 部署，未来服务可通过 API、D1 记录、私有文件基础设施和受控研究工具接入。</p>
+          <div class="hero-actions"><a class="academic-button primary" href="projects.html">查看项目</a><a class="academic-button ghost" href="contact.html">讨论合作</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+    <script src="/scripts/visual-effects.js" defer></script>
+  </body>
+</html>

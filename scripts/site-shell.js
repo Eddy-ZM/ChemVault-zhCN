@@ -1,11 +1,16 @@
 (function () {
   const themeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
   const searchIntent = () => window.CHEMVAULT_SEARCH_INTENT;
+  const importedStoreKey = "chemvault-imported-records";
+  let shellSearchItemsCache = null;
+  let shellSearchImportSignature = "";
+  let shellSearchFrame = 0;
 
   document.addEventListener("DOMContentLoaded", () => {
     wireShellNav();
     wireShellTheme();
     wireShellSearch();
+    upgradeAcademicNavigation();
     markActivePage();
     adaptShellLayout();
     ensureDeveloperFooter();
@@ -48,8 +53,8 @@
     input.addEventListener("blur", () => {
       window.setTimeout(syncShell, 120);
     });
-    input.addEventListener("input", () => {
-      syncShell();
+
+    const renderShellResults = () => {
       const rawQuery = input.value.trim();
       const query = normalise(rawQuery);
       if (!query) {
@@ -57,50 +62,13 @@
         panel.innerHTML = "";
         return;
       }
-      const data = window.CHEMVAULT_DATA;
-      const research = window.CHEMVAULT_RESEARCH;
-      const dossiers = window.CHEMVAULT_DOSSIERS;
-      const methods = window.CHEMVAULT_METHODS;
-      const spectroscopy = window.CHEMVAULT_SPECTROSCOPY;
-      const materials = window.CHEMVAULT_MATERIALS;
+
       const external = window.CHEMVAULT_EXTERNAL;
-      const records = window.CHEMVAULT_RECORDS;
-      const localItems = [
-        ...(records?.buildRecords ? records.buildRecords({ includeImported: true }).map((item) => ({
-          id: item.id,
-          recordType: item.type,
-          type: item.typeLabel || item.type,
-          title: item.title,
-          body: item.body || item.subtitle || "",
-          href: item.external ? item.href : records.recordUrl(item.type, item.id),
-          external: item.external,
-          imageUrl: item.imageUrl || item.raw?.imageUrl || "",
-          formula: item.formula || "",
-          tags: item.tags || [],
-          domain: item.domain || "",
-          family: item.family || "",
-          raw: item.raw || {},
-          text: item.searchText
-        })) : [
-          ...(data?.reactionSystems || []).map((item) => ({ id: item.id, recordType: "reaction", type: "Reaction", title: item.name, body: item.className, href: `workbench.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.className, item.domain, ...(item.conditions || []), ...(item.readouts || []), ...(item.limitations || [])].join(" ") })),
-          ...(data?.reactants || []).map((item) => ({ id: item.id, recordType: "reactant", type: "Reactant", title: item.name, body: item.className, href: `workbench.html?q=${encodeURIComponent(item.name)}`, text: [item.name, item.className, ...(item.functionalGroups || []), ...(item.compatibleMethods || []), ...(item.constraints || [])].join(" ") })),
-          ...(data?.reagents || []).map((item) => ({ id: item.id, recordType: "reagent", type: "Reagent", title: `${item.formula} · ${item.name}`, body: item.focus, formula: item.formula, tags: item.tags || [], href: `reagents.html?id=${encodeURIComponent(item.id)}`, text: [item.formula, item.name, item.focus, item.category, ...(item.tags || []), ...(item.transformations || [])].join(" ") })),
-          ...(data?.compounds || []).map((item) => ({ id: item.id, recordType: "compound", type: "Compound", title: `${item.formula} · ${item.name}`, body: item.summary, formula: item.formula, tags: [...(item.synonyms || []), ...(item.tags || [])], href: `search.html?q=${encodeURIComponent(item.name)}`, text: [item.formula, item.name, item.family, item.cas, item.summary, ...(item.synonyms || []), ...(item.tags || [])].join(" ") })),
-          ...(research?.caseStudies || []).map((item) => ({ id: item.id, recordType: "research-case", type: "Case", title: item.title, body: item.question, href: `research.html?case=${encodeURIComponent(item.id)}`, text: [item.title, item.discipline, item.question, item.thesis].join(" ") })),
-          ...(dossiers?.dossiers || []).map((item) => ({ id: item.id, recordType: "dossier", type: "Dossier", title: item.title, body: item.abstract, href: `dossiers.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.field, item.status, item.abstract, ...(item.keywords || []), ...(item.claims || [])].join(" ") })),
-          ...(methods?.protocols || []).map((item) => ({ id: item.id, recordType: "method", type: "Method", title: item.title, body: item.summary, href: `methods.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.domain, item.level, item.summary, ...(item.inputs || []), ...(item.outputs || [])].join(" ") })),
-          ...(spectroscopy?.cases || []).map((item) => ({ id: item.id, recordType: "spectroscopy", type: "Spectroscopy", title: item.title, body: item.question, href: `spectroscopy.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.family, item.question, item.conclusion, ...(item.signals || []).flatMap((signal) => [signal.technique, signal.signal, signal.interpretation])].join(" ") })),
-          ...(materials?.materials || []).map((item) => ({ id: item.id, recordType: "material", type: "Material", title: item.name, body: item.synthesis, formula: item.formula, tags: item.tags || [], href: `materials.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.family, item.formula, item.synthesis, ...(item.applications || []), ...(item.properties || []), ...(item.characterization || [])].join(" ") })),
-          ...(data?.routes || []).map((item) => ({ recordType: "route", type: "Route", title: `${item.start} to ${item.target}`, body: item.note, href: `library.html?q=${encodeURIComponent(`${item.start} ${item.target}`)}`, text: [item.start, item.target, item.note, ...(item.route || [])].join(" ") })),
-          ...(data?.mechanisms || []).map((item) => ({ id: item.id, recordType: "mechanism", type: "Mechanism", title: item.name, body: item.summary, href: `atlas.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.className, item.summary, ...(item.bestFor || [])].join(" ") })),
-          ...(data?.concepts || []).map((item) => ({ id: item.id, recordType: "concept", type: "Concept", title: item.term, body: item.definition, href: `library.html?q=${encodeURIComponent(item.term)}`, text: [item.term, item.family, item.definition, item.equation].join(" ") })),
-          ...(data?.sources || []).map((item) => ({ id: item.id, recordType: "source", type: "Source", title: item.short, body: item.note, href: `library.html?q=${encodeURIComponent(item.short)}`, text: [item.title, item.short, item.family, item.note].join(" ") }))
-        ])
-      ];
+      const localItems = shellSearchItems();
       const localHits = rankedLocalHits(localItems, rawQuery, 6);
       const externalHits = (external?.sources || []).slice(0, 4).map((source) => ({
-        type: "External",
-        title: `Search ${source.name}`,
+        type: "外部来源",
+        title: `检索 ${source.name}`,
         body: source.bestFor,
         href: source.queryUrl.replace("{query}", encodeURIComponent(rawQuery)),
         external: true,
@@ -109,7 +77,7 @@
       const hits = [...localHits, ...externalHits].slice(0, 8);
       panel.classList.add("active");
       panel.innerHTML = hits.length ? hits.map((hit) => `
-        <a class="search-hit" href="${hit.href}"${hit.external ? ' target="_blank" rel="noreferrer"' : ""}>
+        <a class="search-hit" href="${hit.href}"${hit.external ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <img src="${escapeHTML(thumbnailFor(hit))}" data-fallback-src="${escapeHTML(placeholderImage(hit.type, hit.title, hit.formula || hit.family || hit.domain || ""))}" alt="" loading="lazy" referrerpolicy="no-referrer" />
           <span>${escapeHTML(hit.type)}</span>
           <strong>${escapeHTML(hit.title)}</strong>
@@ -117,8 +85,72 @@
         </a>
       `).join("") : `<div class="empty-state">未找到匹配的学术记录。</div>`;
       wireImageFallbacks(panel);
+    };
+
+    input.addEventListener("input", () => {
+      syncShell();
+      if (shellSearchFrame) cancelAnimationFrame(shellSearchFrame);
+      shellSearchFrame = requestAnimationFrame(() => {
+        shellSearchFrame = 0;
+        renderShellResults();
+      });
     });
     syncShell();
+  }
+
+  function shellSearchItems() {
+    const importSignature = shellSearchImportedSignature();
+    if (shellSearchItemsCache && shellSearchImportSignature === importSignature) {
+      return shellSearchItemsCache;
+    }
+
+    const data = window.CHEMVAULT_DATA;
+    const research = window.CHEMVAULT_RESEARCH;
+    const dossiers = window.CHEMVAULT_DOSSIERS;
+    const methods = window.CHEMVAULT_METHODS;
+    const spectroscopy = window.CHEMVAULT_SPECTROSCOPY;
+    const materials = window.CHEMVAULT_MATERIALS;
+    const records = window.CHEMVAULT_RECORDS;
+    shellSearchItemsCache = records?.buildRecords ? records.buildRecords({ includeImported: true }).map((item) => ({
+      id: item.id,
+      recordType: item.type,
+      type: item.typeLabel || item.type,
+      title: item.title,
+      body: item.body || item.subtitle || "",
+      href: item.external ? item.href : records.recordUrl(item.type, item.id),
+      external: item.external,
+      imageUrl: item.imageUrl || item.raw?.imageUrl || "",
+      formula: item.formula || "",
+      tags: item.tags || [],
+      domain: item.domain || "",
+      family: item.family || "",
+      raw: item.raw || {},
+      text: item.searchText
+    })) : [
+      ...(data?.reactionSystems || []).map((item) => ({ id: item.id, recordType: "reaction", type: "Reaction", title: item.name, body: item.className, href: `workbench.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.className, item.domain, ...(item.conditions || []), ...(item.readouts || []), ...(item.limitations || [])].join(" ") })),
+      ...(data?.reactants || []).map((item) => ({ id: item.id, recordType: "reactant", type: "Reactant", title: item.name, body: item.className, href: `workbench.html?q=${encodeURIComponent(item.name)}`, text: [item.name, item.className, ...(item.functionalGroups || []), ...(item.compatibleMethods || []), ...(item.constraints || [])].join(" ") })),
+      ...(data?.reagents || []).map((item) => ({ id: item.id, recordType: "reagent", type: "Reagent", title: `${item.formula} · ${item.name}`, body: item.focus, formula: item.formula, tags: item.tags || [], href: `reagents.html?id=${encodeURIComponent(item.id)}`, text: [item.formula, item.name, item.focus, item.category, ...(item.tags || []), ...(item.transformations || [])].join(" ") })),
+      ...(data?.compounds || []).map((item) => ({ id: item.id, recordType: "compound", type: "Compound", title: `${item.formula} · ${item.name}`, body: item.summary, formula: item.formula, tags: [...(item.synonyms || []), ...(item.tags || [])], href: `search.html?q=${encodeURIComponent(item.name)}`, text: [item.formula, item.name, item.family, item.cas, item.summary, ...(item.synonyms || []), ...(item.tags || [])].join(" ") })),
+      ...(research?.caseStudies || []).map((item) => ({ id: item.id, recordType: "research-case", type: "Case", title: item.title, body: item.question, href: `research.html?case=${encodeURIComponent(item.id)}`, text: [item.title, item.discipline, item.question, item.thesis].join(" ") })),
+      ...(dossiers?.dossiers || []).map((item) => ({ id: item.id, recordType: "dossier", type: "Dossier", title: item.title, body: item.abstract, href: `dossiers.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.field, item.status, item.abstract, ...(item.keywords || []), ...(item.claims || [])].join(" ") })),
+      ...(methods?.protocols || []).map((item) => ({ id: item.id, recordType: "method", type: "Method", title: item.title, body: item.summary, href: `methods.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.domain, item.level, item.summary, ...(item.inputs || []), ...(item.outputs || [])].join(" ") })),
+      ...(spectroscopy?.cases || []).map((item) => ({ id: item.id, recordType: "spectroscopy", type: "Spectroscopy", title: item.title, body: item.question, href: `spectroscopy.html?id=${encodeURIComponent(item.id)}`, text: [item.title, item.family, item.question, item.conclusion, ...(item.signals || []).flatMap((signal) => [signal.technique, signal.signal, signal.interpretation])].join(" ") })),
+      ...(materials?.materials || []).map((item) => ({ id: item.id, recordType: "material", type: "Material", title: item.name, body: item.synthesis, formula: item.formula, tags: item.tags || [], href: `materials.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.family, item.formula, item.synthesis, ...(item.applications || []), ...(item.properties || []), ...(item.characterization || [])].join(" ") })),
+      ...(data?.routes || []).map((item) => ({ recordType: "route", type: "Route", title: `${item.start} to ${item.target}`, body: item.note, href: `library.html?q=${encodeURIComponent(`${item.start} ${item.target}`)}`, text: [item.start, item.target, item.note, ...(item.route || [])].join(" ") })),
+      ...(data?.mechanisms || []).map((item) => ({ id: item.id, recordType: "mechanism", type: "Mechanism", title: item.name, body: item.summary, href: `atlas.html?id=${encodeURIComponent(item.id)}`, text: [item.name, item.className, item.summary, ...(item.bestFor || [])].join(" ") })),
+      ...(data?.concepts || []).map((item) => ({ id: item.id, recordType: "concept", type: "Concept", title: item.term, body: item.definition, href: `library.html?q=${encodeURIComponent(item.term)}`, text: [item.term, item.family, item.definition, item.equation].join(" ") })),
+      ...(data?.sources || []).map((item) => ({ id: item.id, recordType: "source", type: "Source", title: item.short, body: item.note, href: `library.html?q=${encodeURIComponent(item.short)}`, text: [item.title, item.short, item.family, item.note].join(" ") }))
+    ];
+    shellSearchImportSignature = importSignature;
+    return shellSearchItemsCache;
+  }
+
+  function shellSearchImportedSignature() {
+    try {
+      return localStorage.getItem(importedStoreKey) || "";
+    } catch {
+      return "";
+    }
   }
 
   function rankedLocalHits(items, rawQuery, limit) {
@@ -155,6 +187,43 @@
     });
   }
 
+  function upgradeAcademicNavigation() {
+    const nav = document.querySelector(".site-nav");
+    if (!nav) return;
+    nav.innerHTML = [
+      ["首页", "/index.html"],
+      ["研究", "/pages/research.html"],
+      ["平台", "/pages/platform.html"],
+      ["项目", "/pages/projects.html"],
+      ["笔记", "/pages/notes.html"],
+      ["化合物", "/pages/search.html"]
+    ].map(([label, href]) => `<a href="${href}">${label}</a>`).join("") + `
+      <details class="nav-more">
+        <summary>更多</summary>
+        <div class="nav-more-menu">
+          <a href="/pages/app.html">应用</a>
+          <a href="/pages/workbench.html">工作台</a>
+          <a href="/pages/reagents.html">试剂</a>
+          <a href="/pages/materials.html">材料</a>
+          <a href="/pages/methods.html">方法</a>
+          <a href="/pages/dossiers.html">档案</a>
+          <a href="/pages/spectroscopy.html">谱学</a>
+          <a href="/pages/atlas.html">图谱</a>
+          <a href="/pages/library.html">资料库</a>
+          <a href="/pages/about.html">关于</a>
+          <a href="/pages/filing.html">备案信息</a>
+          <a href="/pages/team.html">团队</a>
+          <a href="/pages/developer.html">开发者</a>
+          <a href="/pages/contact.html">联系</a>
+        </div>
+      </details>`;
+
+    const brand = document.querySelector(".brand");
+    const brandSmall = brand?.querySelector("small");
+    if (brand) brand.setAttribute("href", "/index.html");
+    if (brandSmall) brandSmall.textContent = "科学知识基础设施";
+  }
+
   function applyTheme(theme, options = {}) {
     const setting = normaliseTheme(theme);
     const mode = resolveTheme(setting);
@@ -169,7 +238,8 @@
     if (options.persist !== false) localStorage.setItem("chemvault-theme", setting);
     document.querySelector("meta[name='theme-color']")?.setAttribute("content", dark ? "#101114" : "#f5f5f7");
     document.querySelectorAll("[data-shell-action='theme']").forEach((button) => {
-      button.dataset.themeState = setting;
+      button.dataset.themeSetting = setting;
+      button.dataset.themeState = mode;
       button.dataset.themeResolved = mode;
       button.setAttribute("aria-label", themeLabel(setting, mode));
       button.setAttribute("title", themeTitle(setting, mode));
@@ -206,20 +276,15 @@
   }
 
   function nextThemeSetting(setting) {
-    const normalised = normaliseTheme(setting);
-    if (normalised === "system") return resolveTheme("system") === "dark" ? "light" : "dark";
-    return normalised === "light" ? "dark" : "system";
+    return resolveTheme(normaliseTheme(setting)) === "dark" ? "light" : "dark";
   }
 
   function themeLabel(setting, mode) {
-    if (setting === "system") return `系统主题，当前为${mode === "dark" ? "深色" : "浅色"}。切换为${mode === "dark" ? "浅色" : "深色"}主题`;
-    if (setting === "light") return "浅色主题。切换为深色主题";
-    return "深色主题。切换为系统主题";
+    return `${mode === "dark" ? "深色" : "浅色"}主题已启用。切换为${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function themeTitle(setting, mode) {
-    if (setting === "system") return `系统主题（${mode === "dark" ? "深色" : "浅色"}）`;
-    return setting === "light" ? "浅色主题" : "深色主题";
+    return `切换为${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function normalisePath(pathname) {
@@ -231,34 +296,94 @@
 
   function ensureDeveloperFooter() {
     if (document.querySelector(".site-footer")) return;
-    const version = document.querySelector(".site-version");
+    const versionLabel = "ChemVault v0.2.4";
     const footer = document.createElement("footer");
     footer.className = "site-footer";
+    footer.setAttribute("aria-label", "ChemVault 页脚");
     footer.innerHTML = `
-      <div class="container footer-grid developer-footer-grid">
-        <div class="footer-brand-block">
-          <a class="footer-brand" href="/index.html">
-            <span class="footer-brand-mark" aria-hidden="true"><img src="/assets/chemvault-logo-mark.png" alt="" /></span>
-            <span><strong>ChemVault</strong><small>学术化学知识门户</small></span>
-          </a>
-          <p>ChemVault 中文站仅用于学习、科研资料整理和公开信息检索；资料可能存在错误，实际研究、实验和安全判断请以权威来源复核。</p>
-        </div>
-        <div class="footer-column">
-          <span class="footer-heading">联系方式</span>
-          <a href="mailto:contact@chemvault.science">contact@chemvault.science</a>
-          <span>由 Ziwen M. 创建并维护。</span>
-        </div>
-        <div class="footer-column footer-legal">
-          <span class="footer-heading">合规信息</span>
-          <a href="/pages/filing.html">网站说明与备案信息</a>
-          <span>ICP备案号：待填写</span>
-          <span>© 2026 ChemVault</span>
-          <span>保留所有权利。</span>
+      <div class="footer-sticky-layer">
+        <div class="footer-sticky-shell">
+          <div class="footer-panel">
+            <div class="footer-ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="container footer-grid developer-footer-grid">
+              <div class="footer-brand-block footer-reveal" style="--footer-delay: 0ms">
+                <a class="footer-brand" href="/index.html">
+                  <span class="footer-brand-mark" aria-hidden="true"><img src="/assets/chemvault-logo-mark.png" alt="" /></span>
+                  <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+                </a>
+                <p>面向化学、科学数据抽取、研究智能与 AI 辅助知识系统的学术技术项目。化学信息用于学习和资料整理，实际研究与安全判断请复核一手来源。</p>
+                <div class="footer-social-row" aria-label="页脚快捷入口">
+                  <a class="footer-social" href="/pages/search.html" aria-label="检索 ChemVault">化合物检索</a>
+                  <a class="footer-social" href="/pages/platform.html" aria-label="打开平台页">平台</a>
+                  <a class="footer-social" href="/pages/public-data.html" aria-label="打开公开数据说明">公开数据</a>
+                </div>
+              </div>
+              <div class="footer-link-groups">
+                <div class="footer-column footer-reveal" style="--footer-delay: 90ms">
+                  <span class="footer-heading">探索</span>
+                  <a href="/pages/research.html">研究</a>
+                  <a href="/pages/platform.html">平台</a>
+                  <a href="/pages/projects.html">项目</a>
+                  <a href="/pages/notes.html">笔记</a>
+                  <a href="/pages/about.html">关于</a>
+                  <a href="/pages/team.html">团队</a>
+                </div>
+                <div class="footer-column footer-reveal" style="--footer-delay: 180ms">
+                  <span class="footer-heading">工作区</span>
+                  <a href="/pages/search.html">化合物检索</a>
+                  <a href="/pages/workbench.html">研究工作台</a>
+                  <a href="/pages/app.html">框架应用</a>
+                  <a href="/pages/reagents.html">试剂</a>
+                  <a href="/pages/materials.html">材料</a>
+                  <a href="/pages/atlas.html">图谱</a>
+                </div>
+                <div class="footer-column footer-reveal" style="--footer-delay: 270ms">
+                  <span class="footer-heading">资源</span>
+                  <a href="/pages/library.html">资料库</a>
+                  <a href="/pages/methods.html">方法</a>
+                  <a href="/pages/spectroscopy.html">谱学</a>
+                  <a href="/pages/dossiers.html">档案</a>
+                  <a href="/pages/public-data.html">公开数据</a>
+                  <a href="/pages/sitemap.html">站点地图</a>
+                </div>
+                <div class="footer-column footer-reveal" style="--footer-delay: 360ms">
+                  <span class="footer-heading">联系</span>
+                  <a href="mailto:contact@chemvault.science">联系 ChemVault</a>
+                  <a href="/pages/contact.html">合作沟通</a>
+                  <a href="https://github.com/Eddy-ZM" target="_blank" rel="noopener noreferrer">GitHub</a>
+                  <a href="/pages/filing.html">网站说明与备案信息</a>
+                  <span>ICP备案号：待填写</span>
+                  <span>© 2026 ChemVault</span>
+                </div>
+              </div>
+            </div>
+            <div class="container footer-mobile-compact">
+              <div class="footer-mobile-identity">
+                <a class="footer-brand" href="/index.html">
+                  <span class="footer-brand-mark" aria-hidden="true"><img src="/assets/chemvault-logo-mark.png" alt="" /></span>
+                  <span><strong>ChemVault</strong><small>科学基础设施</small></span>
+                </a>
+                <p>面向化学和科学知识系统的学术技术项目。使用前请复核一手数据。</p>
+              </div>
+              <nav class="footer-mobile-links" aria-label="页脚导航">
+                <a href="/pages/search.html">化合物</a>
+                <a href="/pages/platform.html">平台</a>
+                <a href="/pages/projects.html">项目</a>
+                <a href="/pages/contact.html">联系</a>
+              </nav>
+            </div>
+            <div class="container footer-bottom">
+              <p>© 2026 ChemVault，保留所有权利。</p>
+              <div class="footer-bottom-meta">
+                <p>研究导向参考资料，不能替代一手文献、安全评估或机构规范。</p>
+                <span class="footer-version">${versionLabel}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;
-    if (version) version.before(footer);
-    else document.body.appendChild(footer);
+    document.body.appendChild(footer);
   }
 
   function adaptShellLayout() {
@@ -304,7 +429,7 @@
   }
 
   function normalise(value) {
-    return String(value).toLowerCase().replace(/[^a-z0-9.+-]/g, "");
+    return String(value).normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}.+-]/gu, "");
   }
 
   function escapeHTML(value) {

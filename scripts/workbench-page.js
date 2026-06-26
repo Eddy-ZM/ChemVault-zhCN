@@ -439,7 +439,7 @@
     if (!panel) return;
     const query = state.query || system?.name || "reaction mechanism chemistry";
     panel.innerHTML = (external.sources || []).slice(0, 5).map((source) => `
-      <a class="secondary-button" href="${externalUrl(source, query)}" target="_blank" rel="noreferrer">${esc(source.name)}</a>
+      <a class="secondary-button" href="${externalUrl(source, query)}" target="_blank" rel="noopener noreferrer">${esc(source.name)}</a>
     `).join("");
   }
 

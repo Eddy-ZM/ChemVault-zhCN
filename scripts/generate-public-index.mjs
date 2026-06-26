@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import vm from "node:vm";
 
-const SITE_ORIGIN = process.env.CHEMVAULT_SITE_ORIGIN || "https://chemvault.pages.dev";
+const SITE_ORIGIN = process.env.CHEMVAULT_SITE_ORIGIN || "https://chemvault-zh.pages.dev";
 const INDEX_PATH = "/data/public-record-index.json";
 
 const dataFiles = [

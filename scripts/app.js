@@ -364,7 +364,7 @@
 
   function renderSources(sources = data.sources) {
     $("#sourceGrid").innerHTML = sources.map((source) => `
-      <a class="source-card" href="${escapeHTML(source.url)}" target="_blank" rel="noreferrer">
+      <a class="source-card" href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">
         <span>${escapeHTML(source.family)}</span>
         <strong>${escapeHTML(source.short)}</strong>
         <p>${escapeHTML(source.note)}</p>
@@ -395,7 +395,7 @@
       </div>
       <div class="reference-list">
         ${sources.map((source) => `
-          <a href="${escapeHTML(source.url)}" target="_blank" rel="noreferrer">
+          <a href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">
             <strong>${escapeHTML(source.short)}</strong>
             <span>${escapeHTML(source.reliability)}</span>
           </a>
@@ -903,7 +903,8 @@
     if (options.persist !== false) localStorage.setItem("chemvault-theme", setting);
     document.querySelector("meta[name='theme-color']")?.setAttribute("content", dark ? "#101114" : "#f5f5f7");
     document.querySelectorAll("[data-action='theme']").forEach((button) => {
-      button.dataset.themeState = setting;
+      button.dataset.themeSetting = setting;
+      button.dataset.themeState = mode;
       button.dataset.themeResolved = mode;
       button.setAttribute("aria-label", themeLabel(setting, mode));
       button.setAttribute("title", themeTitle(setting, mode));
@@ -940,20 +941,15 @@
   }
 
   function nextThemeSetting(setting) {
-    const normalised = normaliseTheme(setting);
-    if (normalised === "system") return resolveTheme("system") === "dark" ? "light" : "dark";
-    return normalised === "light" ? "dark" : "system";
+    return resolveTheme(normaliseTheme(setting)) === "dark" ? "light" : "dark";
   }
 
   function themeLabel(setting, mode) {
-    if (setting === "system") return `System theme, currently ${mode}. Switch to ${mode === "dark" ? "light" : "dark"} theme`;
-    if (setting === "light") return "Light theme. Switch to dark theme";
-    return "Dark theme. Switch to system theme";
+    return `当前为${mode === "dark" ? "深色" : "浅色"}主题。切换到${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function themeTitle(setting, mode) {
-    if (setting === "system") return `System theme (${mode})`;
-    return setting === "light" ? "Light theme" : "Dark theme";
+    return `切换到${mode === "dark" ? "浅色" : "深色"}主题`;
   }
 
   function getSaved() {

@@ -11,10 +11,10 @@ test("record detail page renders credibility and safety summary panels", () => {
 
   for (const marker of [
     "record-trust-strip",
-    "Evidence maturity",
-    "Source provenance",
-    "Safety profile",
-    "Verification status",
+    "证据成熟度",
+    "来源链路",
+    "安全画像",
+    "核验状态",
     "record-safety-panel"
   ]) {
     assert.match(script, new RegExp(marker), `record detail renderer includes ${marker}`);
@@ -26,10 +26,10 @@ test("record detail page renders actionable next-step research guidance", () => 
 
   for (const marker of [
     "record-next-steps",
-    "Next research steps",
-    "Verify source",
-    "Compare linked chemistry",
-    "Plan safe handling"
+    "后续研究动作",
+    "核验来源",
+    "对比关联化学",
+    "规划安全处理"
   ]) {
     assert.match(script, new RegExp(marker), `record detail renderer includes ${marker}`);
   }
@@ -45,5 +45,5 @@ test("record detail page uses a fresh cache key for its changed script", () => {
 test("record detail page busts the stylesheet cache for new detail styles", () => {
   const html = read("pages/record.html");
 
-  assert.match(html, /portal\.css\?v=20260615a/, "record page references the upgraded portal stylesheet cache key");
+  assert.match(html, /portal\.css\?v=20260619c/, "record page references the upgraded portal stylesheet cache key");
 });

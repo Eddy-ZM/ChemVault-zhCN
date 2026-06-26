@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChemVault 中文站 | 研究工作台</title>
-  <meta name="description" content="ChemVault 研究工作台在动态界面中整合反应体系、反应物、化合物、试剂、材料、机理和证据审查。" />
+  <meta name="description" content="连接反应体系、反应物、试剂、化合物、材料、机理、路线逻辑和证据队列的动态工作台。" />
   <meta name="theme-color" content="#f5f5f7" />
-  <script src="/scripts/boot.js?v=20260603a"></script>
+  <script src="/scripts/boot.js?v=20260618c"></script>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <link rel="stylesheet" href="../assets/styles.css?v=20260611a" />
-  <link rel="stylesheet" href="../assets/portal.css?v=20260615a" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260622b" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260619c" />
   <script src="../data/chem-data.js?v=20260603a" defer></script>
   <script src="../data/reagent-extension.js?v=20260603a" defer></script>
   <script src="../data/research-data.js?v=20260603a" defer></script>
@@ -27,28 +27,34 @@
   <script src="../data/external-sources.js?v=20260603a" defer></script>
   <script src="../scripts/record-utils.js?v=20260603a" defer></script>
   <script src="../scripts/api.js?v=20260603a" defer></script>
-  <script src="../scripts/motion.js?v=20260603a" defer></script>
-  <script src="../scripts/site-shell.js?v=20260611a" defer></script>
+  <script src="../scripts/motion.js?v=20260618c" defer></script>
+  <script src="../scripts/site-shell.js?v=20260623teamnav" defer></script>
   <script src="../scripts/workbench-page.js?v=20260603a" defer></script>
 </head>
 <body class="page-shell" data-boot-label="工作台">
   <a class="skip-link" href="#main">跳转到主要内容</a>
-    <header class="site-header">
+  <header class="site-header">
     <div class="container nav-shell">
-      <a class="brand" href="../index.html" aria-label="ChemVault 首页"><span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span><span><strong>ChemVault</strong><small>学术化学资料库</small></span></a>
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+        <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+      </a>
       <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="site-nav" aria-label="主导航">
         <a href="../index.html">首页</a>
-        <a href="search.html">检索</a>
-        <a href="workbench.html">工作台</a>
-        <a href="reagents.html">试剂</a>
-        <a href="materials.html">材料</a>
-        <a href="methods.html">方法</a>
+        <a href="research.html">研究</a>
+        <a href="platform.html">平台</a>
+        <a href="projects.html">项目</a>
+        <a href="notes.html">笔记</a>
+        <a href="search.html">化合物</a>
         <details class="nav-more">
           <summary>更多</summary>
           <div class="nav-more-menu">
             <a href="app.html">应用</a>
-            <a href="research.html">研究</a>
+            <a href="workbench.html">工作台</a>
+            <a href="reagents.html">试剂</a>
+            <a href="materials.html">材料</a>
+            <a href="methods.html">方法</a>
             <a href="dossiers.html">档案</a>
             <a href="spectroscopy.html">谱学</a>
             <a href="atlas.html">图谱</a>
@@ -57,10 +63,14 @@
             <a href="filing.html">备案信息</a>
             <a href="team.html">团队</a>
             <a href="developer.html">开发者</a>
+            <a href="contact.html">联系</a>
           </div>
         </details>
       </nav>
-      <div class="header-actions"><label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索本地记录..." /></label><button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button></div>
+      <div class="header-actions">
+        <label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索化合物..." /></label>
+        <button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button>
+      </div>
     </div>
     <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
   </header>
@@ -180,28 +190,6 @@
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="container footer-grid developer-footer-grid">
-      <div class="footer-brand-block">
-        <a class="footer-brand" href="../index.html">
-          <span class="footer-brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
-          <span><strong>ChemVault</strong><small>学术化学知识门户</small></span>
-        </a>
-        <p>ChemVault 中文站仅用于学习、科研资料整理和公开信息检索；资料可能存在错误，实际研究、实验和安全判断请以权威来源复核。</p>
-      </div>
-      <div class="footer-column">
-        <span class="footer-heading">联系方式</span>
-        <a href="mailto:contact@chemvault.science">contact@chemvault.science</a>
-        <span>由 Ziwen M. 创建并维护。</span>
-      </div>
-      <div class="footer-column footer-legal">
-        <span class="footer-heading">合规信息</span>
-        <a href="filing.html">网站说明与备案信息</a>
-        <span>ICP备案号：待填写</span>
-        <span>© 2026 ChemVault，保留所有权利。</span>
-      </div>
-    </div>
-  </footer>
-  <div class="site-version">ChemVault v0.2.4</div>
+  <script src="/scripts/visual-effects.js" defer></script>
 </body>
 </html>

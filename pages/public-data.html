@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemVault 中文站 | 公开数据</title>
+  <meta name="description" content="ChemVault 公开数据资源的人类可读说明，包括用于化学检索和学术参考的公开记录索引。" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <script src="/scripts/boot.js?v=20260618c"></script>
+  <link rel="canonical" href="https://chemvault-zh.pages.dev/pages/public-data.html" />
+  <link rel="alternate" type="application/json" title="ChemVault 公开记录索引" href="/data/public-record-index.json" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260622b" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260619c" />
+  <script src="../data/chem-data.js?v=20260603a" defer></script>
+  <script src="../data/reagent-extension.js?v=20260603a" defer></script>
+  <script src="../data/research-data.js?v=20260603a" defer></script>
+  <script src="../data/dossier-data.js?v=20260603a" defer></script>
+  <script src="../data/method-data.js?v=20260603a" defer></script>
+  <script src="../data/spectroscopy-data.js?v=20260603a" defer></script>
+  <script src="../data/materials-data.js?v=20260603a" defer></script>
+  <script src="../data/database-expansion.js?v=20260603a" defer></script>
+  <script src="../data/reagent-megalibrary.js?v=20260603a" defer></script>
+  <script src="../data/knowledge-expansion.js?v=20260603a" defer></script>
+  <script src="../data/local-catalog-10000.js?v=20260603a" defer></script>
+  <script src="../data/external-sources.js?v=20260603a" defer></script>
+  <script src="../scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="../scripts/api.js?v=20260603a" defer></script>
+  <script src="../scripts/motion.js?v=20260618c" defer></script>
+  <script src="../scripts/site-shell.js?v=20260623teamnav" defer></script>
+</head>
+<body class="page-shell" data-boot-label="公开数据">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+        <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+      </a>
+      <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="../index.html">首页</a>
+        <a href="research.html">研究</a>
+        <a href="platform.html">平台</a>
+        <a href="projects.html">项目</a>
+        <a href="notes.html">笔记</a>
+        <a href="search.html">化合物</a>
+        <details class="nav-more">
+          <summary>更多</summary>
+          <div class="nav-more-menu">
+            <a href="app.html">应用</a>
+            <a href="workbench.html">工作台</a>
+            <a href="reagents.html">试剂</a>
+            <a href="materials.html">材料</a>
+            <a href="methods.html">方法</a>
+            <a href="dossiers.html">档案</a>
+            <a href="spectroscopy.html">谱学</a>
+            <a href="atlas.html">图谱</a>
+            <a href="library.html">资料库</a>
+            <a href="about.html">关于</a>
+            <a href="filing.html">备案信息</a>
+            <a href="team.html">团队</a>
+            <a href="developer.html">开发者</a>
+            <a href="contact.html">联系</a>
+          </div>
+        </details>
+      </nav>
+      <div class="header-actions">
+        <label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索化合物..." /></label>
+        <button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button>
+      </div>
+    </div>
+    <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container page-hero-grid">
+        <div>
+          <p class="eyebrow">机器可读资源</p>
+          <h1>公开数据</h1>
+          <p>ChemVault 发布结构化公开记录索引，用于化合物检索、化学记录、方法、材料、档案和研究导向导航。</p>
+        </div>
+        <aside class="page-index-card">
+          <strong>数据访问</strong>
+          <ol>
+            <li>人类可读说明</li>
+            <li>结构化 JSON 索引</li>
+            <li>检索和记录 URL</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="portal-grid">
+          <a class="portal-card portal-card-featured" href="/data/public-record-index.json" download>
+            <span>JSON 导出</span>
+            <strong>下载公开记录索引</strong>
+            <p>面向检索、元数据检查和外部索引工作流的机器可读 ChemVault 记录。</p>
+            <em>下载 JSON</em>
+          </a>
+          <a class="portal-card" href="search.html">
+            <span>人类可读检索</span>
+            <strong>打开化合物检索</strong>
+            <p>通过 ChemVault 检索界面使用公开数据，而不是直接在浏览器中阅读原始 JSON。</p>
+            <em>检索记录</em>
+          </a>
+          <a class="portal-card" href="library.html">
+            <span>参考层</span>
+            <strong>浏览资料库</strong>
+            <p>通过可读门户视图复核概念、来源家族和公开知识记录。</p>
+            <em>打开资料库</em>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tint">
+      <div class="container">
+        <div class="detail-grid">
+          <article class="page-panel">
+            <h2>索引包含什么</h2>
+            <div class="micro-table">
+              <div class="micro-row"><span>记录</span><strong>化合物、试剂、材料、方法、谱图、档案和研究案例</strong></div>
+              <div class="micro-row"><span>元数据</span><strong>标题、摘要、标签、领域、成熟度和规范 URL</strong></div>
+              <div class="micro-row"><span>用途</span><strong>检索、引用感知导航、本地索引和公开数据检查</strong></div>
+            </div>
+          </article>
+          <article class="page-panel">
+            <h2>推荐入口</h2>
+            <div class="portal-grid">
+              <a class="portal-card" href="search.html"><span>检索</span><strong>化合物检索</strong><p>使用名称、分子式、标识符或研究术语。</p></a>
+              <a class="portal-card" href="workbench.html"><span>工作区</span><strong>研究工作台</strong><p>查看关联记录和证据界面。</p></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/scripts/visual-effects.js" defer></script>
+</body>
+</html>

@@ -27,7 +27,7 @@
       return !query || text.includes(query);
     });
     $("#sourceBrowser").innerHTML = sources.map((source) => `
-      <a class="source-browser-card" href="${escapeHTML(source.url)}" target="_blank" rel="noreferrer">
+      <a class="source-browser-card" href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">
         <span>${escapeHTML(source.family)}</span>
         <h3>${escapeHTML(source.short)}</h3>
         <p>${escapeHTML(source.note)}</p>

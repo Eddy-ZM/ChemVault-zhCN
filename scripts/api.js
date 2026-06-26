@@ -4,32 +4,32 @@
     {
       id: "nabh4",
       type: "reagent",
-      typeLabel: "Reagent",
-      title: "Sodium borohydride",
-      subtitle: "NaBH4 · Carbonyl reduction",
-      body: "Mild hydride donor for reducing aldehydes and ketones to alcohols in teaching-lab contexts.",
-      domain: "Reduction",
-      family: "Carbonyl reduction",
+      typeLabel: "试剂",
+      title: "硼氢化钠",
+      subtitle: "NaBH4 · 羰基还原",
+      body: "温和的氢化物供体，可在教学实验场景中将醛和酮还原为醇。",
+      domain: "还原",
+      family: "羰基还原",
       risk: "standard",
       formula: "NaBH4",
-      tags: ["hydride", "carbonyl", "selective", "alcohol"],
+      tags: ["氢化物", "羰基", "选择性", "醇", "sodium borohydride"],
       href: "/pages/record.html?type=reagent&id=nabh4",
       sourceHref: "/pages/reagents.html?id=nabh4",
-      imageUrl: placeholderImage("Reagent", "NaBH4", "Reduction")
+      imageUrl: placeholderImage("试剂", "NaBH4", "还原")
     },
     {
       id: "graphene-oxide",
       type: "material",
-      typeLabel: "Material",
-      title: "Graphene oxide",
-      subtitle: "oxidized graphene sheet · Carbon nanomaterial",
-      body: "Oxidized graphite-derived material with oxygenated groups; evidence claims need composition and reduction history.",
-      family: "Carbon nanomaterial",
+      typeLabel: "材料",
+      title: "氧化石墨烯",
+      subtitle: "氧化石墨烯片层 · 碳纳米材料",
+      body: "含氧官能团的氧化石墨衍生材料；证据主张需要注明组成和还原历史。",
+      family: "碳纳米材料",
       maturity: 82,
-      tags: ["graphene oxide", "carbon", "dispersion", "surface chemistry"],
+      tags: ["氧化石墨烯", "graphene oxide", "碳", "分散", "表面化学"],
       href: "/pages/record.html?type=material&id=graphene-oxide",
       sourceHref: "/pages/materials.html?id=graphene-oxide",
-      imageUrl: placeholderImage("Material", "Graphene oxide", "Surface chemistry")
+      imageUrl: placeholderImage("材料", "氧化石墨烯", "表面化学")
     }
   ];
   const state = {
@@ -262,7 +262,7 @@
   }
 
   function normalise(value) {
-    return String(value || "").toLowerCase().replace(/[^a-z0-9.+-]/g, " ").replace(/\s+/g, " ").trim();
+    return String(value || "").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}.+-]/gu, " ").replace(/\s+/g, " ").trim();
   }
 
   function clamp(value, min, max) {
@@ -273,7 +273,7 @@
   function placeholderImage(type, title, subtitle = "") {
     const palette = imagePalette(type);
     const formula = imageFormula(subtitle);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-label="${svgEsc(title)}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="${palette.bg}"/><stop offset="1" stop-color="${palette.bg2}"/></linearGradient></defs><rect width="640" height="420" fill="url(#bg)"/><rect x="28" y="28" width="584" height="364" rx="28" fill="#fff" stroke="${palette.border}"/><text x="54" y="76" fill="${palette.accent}" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="800">${svgEsc(type).slice(0, 34)}</text><g transform="translate(74 112)" fill="none" stroke="${palette.line}" stroke-linecap="round" stroke-linejoin="round"><path d="M104 0 184 46v92l-80 46-80-46V46Z" stroke-width="10" opacity=".74"/><path d="M184 46h82M184 138h82M24 46l-54-32M24 138l-54 32" stroke-width="8" opacity=".48"/><path d="M266 46 318 16M266 138l52 30" stroke-width="7" opacity=".38"/><circle cx="104" cy="0" r="18" fill="${palette.accent}" stroke="none"/><circle cx="184" cy="138" r="18" fill="${palette.accent2}" stroke="none"/><circle cx="318" cy="16" r="15" fill="${palette.accent}" stroke="none"/></g><text x="372" y="168" fill="${palette.text}" font-family="SFMono-Regular,Menlo,Consolas,monospace" font-size="36" font-weight="800">${svgEsc(formula || "Chem record").slice(0, 18)}</text><text x="372" y="206" fill="${palette.muted}" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700">curated preview</text><text x="54" y="338" fill="${palette.text}" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="850">${svgEsc(title).slice(0, 30)}</text><text x="54" y="370" fill="${palette.muted}" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="650">${svgEsc(subtitle).slice(0, 48)}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-label="${svgEsc(title)}"><defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="${palette.bg}"/><stop offset="1" stop-color="${palette.bg2}"/></linearGradient></defs><rect width="640" height="420" fill="url(#bg)"/><rect x="28" y="28" width="584" height="364" rx="28" fill="#fff" stroke="${palette.border}"/><text x="54" y="76" fill="${palette.accent}" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="800">${svgEsc(type).slice(0, 34)}</text><g transform="translate(74 112)" fill="none" stroke="${palette.line}" stroke-linecap="round" stroke-linejoin="round"><path d="M104 0 184 46v92l-80 46-80-46V46Z" stroke-width="10" opacity=".74"/><path d="M184 46h82M184 138h82M24 46l-54-32M24 138l-54 32" stroke-width="8" opacity=".48"/><path d="M266 46 318 16M266 138l52 30" stroke-width="7" opacity=".38"/><circle cx="104" cy="0" r="18" fill="${palette.accent}" stroke="none"/><circle cx="184" cy="138" r="18" fill="${palette.accent2}" stroke="none"/><circle cx="318" cy="16" r="15" fill="${palette.accent}" stroke="none"/></g><text x="372" y="168" fill="${palette.text}" font-family="SFMono-Regular,Menlo,Consolas,monospace" font-size="36" font-weight="800">${svgEsc(formula || "化学记录").slice(0, 18)}</text><text x="372" y="206" fill="${palette.muted}" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700">整理预览</text><text x="54" y="338" fill="${palette.text}" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="850">${svgEsc(title).slice(0, 30)}</text><text x="54" y="370" fill="${palette.muted}" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="650">${svgEsc(subtitle).slice(0, 48)}</text></svg>`;
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
   }
 

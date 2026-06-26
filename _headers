@@ -5,11 +5,20 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://pubchem.ncbi.nlm.nih.gov https://*.ncbi.nlm.nih.gov; font-src 'self'; connect-src 'self' https://pubchem.ncbi.nlm.nih.gov https://eutils.ncbi.nlm.nih.gov https://pmc.ncbi.nlm.nih.gov https://www.ncbi.nlm.nih.gov; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/pages/*
+  Cache-Control: no-cache, max-age=0, must-revalidate
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
 /data/*
   Cache-Control: public, max-age=3600
 
+/scripts/site-shell.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
 /scripts/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=300, must-revalidate

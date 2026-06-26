@@ -4,15 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChemVault 中文站 | 关于</title>
-  <meta name="description" content="关于 ChemVault 中文站：项目用途、主要功能和后续规划。" />
-  <meta name="theme-color" content="#f5f5f7" />
-  <script src="/scripts/boot.js?v=20260603a"></script>
+  <meta name="description" content="了解 ChemVault 的使命、愿景和长期平台方向。" />
+  <meta name="keywords" content="ChemVault 关于, 化学基础设施, AI 辅助科学, 研究智能, 科学知识系统" />
+  <meta name="theme-color" content="#07111f" />
+  <script src="/scripts/boot.js?v=20260618c"></script>
+  <meta property="og:title" content="ChemVault 中文站 | 关于" />
+  <meta property="og:description" content="了解 ChemVault 的使命、愿景和长期平台方向。" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://chemvault-zh.pages.dev/pages/about.html" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <link rel="stylesheet" href="../assets/styles.css?v=20260611a" />
-  <link rel="stylesheet" href="../assets/portal.css?v=20260615a" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260622b" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260619c" />
+  <link rel="stylesheet" href="../assets/academic.css?v=20260623mobilefix" />
   <script src="../data/chem-data.js?v=20260603a" defer></script>
   <script src="../data/reagent-extension.js?v=20260603a" defer></script>
   <script src="../data/research-data.js?v=20260603a" defer></script>
@@ -26,28 +32,35 @@
   <script src="../data/local-catalog-10000.js?v=20260603a" defer></script>
   <script src="../data/external-sources.js?v=20260603a" defer></script>
   <script src="../scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="../scripts/search-intent.js?v=20260608a" defer></script>
   <script src="../scripts/api.js?v=20260603a" defer></script>
-  <script src="../scripts/motion.js?v=20260603a" defer></script>
-  <script src="../scripts/site-shell.js?v=20260611a" defer></script>
+  <script src="../scripts/motion.js?v=20260618c" defer></script>
+  <script src="../scripts/site-shell.js?v=20260623teamnav" defer></script>
 </head>
-<body class="page-shell" data-boot-label="关于">
+<body class="page-shell academic-site academic-page" data-boot-label="关于">
   <a class="skip-link" href="#main">跳转到主要内容</a>
-    <header class="site-header">
+  <header class="site-header">
     <div class="container nav-shell">
-      <a class="brand" href="../index.html" aria-label="ChemVault 首页"><span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span><span><strong>ChemVault</strong><small>学术化学资料库</small></span></a>
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+        <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+      </a>
       <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="site-nav" aria-label="主导航">
         <a href="../index.html">首页</a>
-        <a href="search.html">检索</a>
-        <a href="workbench.html">工作台</a>
-        <a href="reagents.html">试剂</a>
-        <a href="materials.html">材料</a>
-        <a href="methods.html">方法</a>
+        <a href="research.html">研究</a>
+        <a href="platform.html">平台</a>
+        <a href="projects.html">项目</a>
+        <a href="notes.html">笔记</a>
+        <a href="search.html">化合物</a>
         <details class="nav-more">
           <summary>更多</summary>
           <div class="nav-more-menu">
             <a href="app.html">应用</a>
-            <a href="research.html">研究</a>
+            <a href="workbench.html">工作台</a>
+            <a href="reagents.html">试剂</a>
+            <a href="materials.html">材料</a>
+            <a href="methods.html">方法</a>
             <a href="dossiers.html">档案</a>
             <a href="spectroscopy.html">谱学</a>
             <a href="atlas.html">图谱</a>
@@ -56,80 +69,103 @@
             <a href="filing.html">备案信息</a>
             <a href="team.html">团队</a>
             <a href="developer.html">开发者</a>
+            <a href="contact.html">联系</a>
           </div>
         </details>
       </nav>
-      <div class="header-actions"><label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索本地记录..." /></label><button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button></div>
+      <div class="header-actions">
+        <label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索化合物..." /></label>
+        <button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button>
+      </div>
     </div>
     <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
   </header>
+
   <main id="main">
-    <section class="page-hero">
-      <div class="container page-hero-grid">
+    <section class="academic-page-hero">
+      <div class="container">
         <div>
-          <p class="eyebrow">关于</p>
-          <h1>关于 ChemVault</h1>
-          <p>ChemVault 是一个独立的学术化学资料门户，面向化学学习、科研资料整理、本地记录检索和可信科学来源补充。</p>
+          <span class="section-kicker">关于</span>
+          <h1>一个独立的学术技术项目。</h1>
+          <p>ChemVault 探索化学、人工智能和科学知识基础设施的交叉领域。</p>
         </div>
-        <aside class="page-index-card">
-          <strong>项目重点</strong>
-          <ol>
-            <li>可检索的化学记录</li>
-            <li>研究流程工具</li>
-            <li>学术来源补充</li>
-          </ol>
+        <aside class="page-index-panel">
+          <strong>关注方向</strong>
+          <span>科学数据抽取</span>
+          <span>化学知识系统</span>
+          <span>研究智能</span>
+          <span>学术技术基础设施</span>
         </aside>
       </div>
     </section>
-    <section class="section">
+
+    <section class="academic-section">
+      <div class="container two-column">
+        <div class="text-column">
+          <div>
+            <span class="section-kicker">使命</span>
+            <p>ChemVault 独立开发并面向研究场景，使命是构建工具，让科学知识更容易在化学、文档和研究工作流之间被抽取、结构化、检索和连接。</p>
+          </div>
+          <div>
+            <span class="section-kicker">愿景</span>
+            <p>长期愿景是形成一层科学知识基础设施，让论文、实验报告、化合物、方法、观察和项目记录成为透明且有来源支撑的研究理解系统的一部分。</p>
+          </div>
+          <div>
+            <span class="section-kicker">ChemVault 构建什么</span>
+            <p>ChemVault 构建公开化学检索界面、数据记录、研究页面、文档抽取概念、文件基础设施、文档体系和早期平台模块，用于 AI 辅助科学工作流。</p>
+          </div>
+          <div>
+            <span class="section-kicker">为什么重要</span>
+            <p>科学工作越来越依赖在非结构化文档和结构化知识之间移动的能力。更好的基础设施可以帮助研究者比较证据、追踪主张、复用数据，并更高效地理解复杂文献集合。</p>
+          </div>
+          <div>
+            <span class="section-kicker">长期方向</span>
+            <p>ChemVault 正在走向面向科学理解、数据抽取和研究智能的工具层：从化合物检索扩展到文献图谱、实验知识库和安全研究工作区。</p>
+          </div>
+        </div>
+        <aside class="page-index-panel">
+          <strong>运行原则</strong>
+          <span>保持学术语气和来源感知工作流。</span>
+          <span>静态优先的公开基础设施，同时为 API 预留空间。</span>
+          <span>透明展示项目成熟度，并谨慎表达科学主张。</span>
+          <span>面向研究者、学生、开发者和科学社群设计。</span>
+        </aside>
+      </div>
+    </section>
+
+    <section class="academic-section">
       <div class="container">
-        <div class="portal-grid">
-          <article class="portal-card">
-            <span>项目定位</span>
-            <strong>ChemVault 是什么？</strong>
-            <p>ChemVault 是化学知识资料门户，将本地化学记录、化合物数据、试剂说明、材料信息、机理节点和学术来源链接整合在一个公开界面中。</p>
-          </article>
-          <article class="portal-card">
-            <span>建设目的</span>
-            <strong>为什么建设这个站点？</strong>
-            <p>本站用于让化学研究信息更容易检索、比较和核查。项目强调本地优先记录、清晰来源和快速访问可信科学数据库。</p>
-          </article>
-          <article class="portal-card">
-            <span>主要功能</span>
-            <strong>主要功能</strong>
-            <p>ChemVault 支持化合物检索、试剂档案、材料记录、机理浏览、谱学笔记、研究页面、D1 API、本地备用数据，以及来自 PubChem、PubMed 等来源的学术补充。</p>
-          </article>
-          <article class="portal-card">
-            <span>后续规划</span>
-            <strong>后续规划</strong>
-            <p>后续将扩展已核查资料库，完善结构和风险信息覆盖，增加科学来源校验，提升检索质量，并继续构建面向化学学习和研究的流程工具。</p>
-          </article>
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">团队</span>
+            <h2>ChemVault 团队信息现在有独立页面。</h2>
+          </div>
+          <p>独立学术技术团队信息已单独展示，使关于页面专注于使命、愿景和平台方向。</p>
+        </div>
+        <div class="hero-actions">
+          <a class="academic-button primary" href="team.html">查看团队</a>
+          <a class="academic-button ghost" href="contact.html">合作沟通</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="academic-section academic-band">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">平台定位</span>
+            <h2>构建面向数据抽取、文献理解和研究知识系统的工具。</h2>
+          </div>
+          <p>ChemVault 希望从公开化学门户成长为更广义的科学技术平台，同时保持清晰、可部署和学术可信度。</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card"><h3>化学基础</h3><p>化合物记录、试剂笔记、材料、方法、谱图和来源感知检索仍然是平台核心。</p></article>
+          <article class="feature-card"><h3>AI 科学工具</h3><p>抽取和文档理解会作为科学数据工作流中的实用工具继续发展。</p></article>
+          <article class="feature-card"><h3>研究基础设施</h3><p>文件、通知、文档和工作区界面构成未来协作层的基础。</p></article>
         </div>
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="container footer-grid developer-footer-grid">
-      <div class="footer-brand-block">
-        <a class="footer-brand" href="../index.html">
-          <span class="footer-brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
-          <span><strong>ChemVault</strong><small>学术化学知识门户</small></span>
-        </a>
-        <p>ChemVault 中文站仅用于学习、科研资料整理和公开信息检索；资料可能存在错误，实际研究、实验和安全判断请以权威来源复核。</p>
-      </div>
-      <div class="footer-column">
-        <span class="footer-heading">联系方式</span>
-        <a href="mailto:contact@chemvault.science">contact@chemvault.science</a>
-        <span>由 Ziwen M. 创建并维护。</span>
-      </div>
-      <div class="footer-column footer-legal">
-        <span class="footer-heading">合规信息</span>
-        <a href="filing.html">网站说明与备案信息</a>
-        <span>ICP备案号：待填写</span>
-        <span>© 2026 ChemVault，保留所有权利。</span>
-      </div>
-    </div>
-  </footer>
-  <div class="site-version">ChemVault v0.2.4</div>
-</body>
+    <script src="/scripts/visual-effects.js" defer></script>
+  </body>
 </html>

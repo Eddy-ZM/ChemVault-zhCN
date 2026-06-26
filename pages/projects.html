@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChemVault 中文站 | ChemVault 生态</title>
+  <meta name="description" content="ChemVault 生态项目覆盖化合物检索、科学数据抽取、通信、安全文件、邮件和文档。" />
+  <meta name="keywords" content="ChemVault projects, ChemVault Compounds, ChemVault Extract, ChemVault Notif, ChemVault Files, ChemVault Mail, ChemVault Docs" />
+  <meta name="theme-color" content="#07111f" />
+  <script src="/scripts/boot.js?v=20260618c"></script>
+  <meta property="og:title" content="ChemVault 中文站 | ChemVault 生态" />
+  <meta property="og:description" content="ChemVault 生态项目覆盖化合物检索、科学数据抽取、通信、安全文件、邮件和文档。" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://chemvault-zh.pages.dev/pages/projects.html" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/chemvault-icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="../assets/styles.css?v=20260622b" />
+  <link rel="stylesheet" href="../assets/portal.css?v=20260619c" />
+  <link rel="stylesheet" href="../assets/academic.css?v=20260623mobilefix" />
+  <script src="../data/chem-data.js?v=20260603a" defer></script>
+  <script src="../data/reagent-extension.js?v=20260603a" defer></script>
+  <script src="../data/research-data.js?v=20260603a" defer></script>
+  <script src="../data/dossier-data.js?v=20260603a" defer></script>
+  <script src="../data/method-data.js?v=20260603a" defer></script>
+  <script src="../data/spectroscopy-data.js?v=20260603a" defer></script>
+  <script src="../data/materials-data.js?v=20260603a" defer></script>
+  <script src="../data/database-expansion.js?v=20260603a" defer></script>
+  <script src="../data/reagent-megalibrary.js?v=20260603a" defer></script>
+  <script src="../data/knowledge-expansion.js?v=20260603a" defer></script>
+  <script src="../data/local-catalog-10000.js?v=20260603a" defer></script>
+  <script src="../data/external-sources.js?v=20260603a" defer></script>
+  <script src="../scripts/record-utils.js?v=20260603a" defer></script>
+  <script src="../scripts/search-intent.js?v=20260608a" defer></script>
+  <script src="../scripts/api.js?v=20260603a" defer></script>
+  <script src="../scripts/motion.js?v=20260618c" defer></script>
+  <script src="../scripts/site-shell.js?v=20260623teamnav" defer></script>
+</head>
+<body class="page-shell academic-site academic-page" data-boot-label="项目">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="../index.html" aria-label="ChemVault 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/chemvault-logo-mark.png" alt="" /></span>
+        <span><strong>ChemVault</strong><small>科学知识基础设施</small></span>
+      </a>
+      <button class="icon-button menu-toggle" type="button" aria-label="打开导航" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="../index.html">首页</a>
+        <a href="research.html">研究</a>
+        <a href="platform.html">平台</a>
+        <a href="projects.html">项目</a>
+        <a href="notes.html">笔记</a>
+        <a href="search.html">化合物</a>
+        <details class="nav-more">
+          <summary>更多</summary>
+          <div class="nav-more-menu">
+            <a href="app.html">应用</a>
+            <a href="workbench.html">工作台</a>
+            <a href="reagents.html">试剂</a>
+            <a href="materials.html">材料</a>
+            <a href="methods.html">方法</a>
+            <a href="dossiers.html">档案</a>
+            <a href="spectroscopy.html">谱学</a>
+            <a href="atlas.html">图谱</a>
+            <a href="library.html">资料库</a>
+            <a href="about.html">关于</a>
+            <a href="filing.html">备案信息</a>
+            <a href="team.html">团队</a>
+            <a href="developer.html">开发者</a>
+            <a href="contact.html">联系</a>
+          </div>
+        </details>
+      </nav>
+      <div class="header-actions">
+        <label class="search-shell" for="shellSearch"><span>检索</span><input id="shellSearch" type="search" placeholder="检索化合物..." /></label>
+        <button class="theme-toggle" type="button" data-shell-action="theme" aria-label="切换主题"><span class="theme-toggle__icon" aria-hidden="true"></span></button>
+      </div>
+    </div>
+    <div class="container shell-search-results" id="shellSearchResults" aria-live="polite"></div>
+  </header>
+
+  <main id="main">
+    <section class="academic-page-hero">
+      <div class="container">
+        <div>
+          <span class="section-kicker">项目</span>
+          <h1>ChemVault 生态</h1>
+          <p>ChemVault 被设计为模块化生态，覆盖化学、研究数据、通信、文档和学术工作流工具。</p>
+        </div>
+        <aside class="page-index-panel">
+          <strong>项目组合</strong>
+          <a href="#compounds">ChemVault Compounds</a>
+          <a href="#extract">ChemVault Extract</a>
+          <a href="#notif">ChemVault Notif</a>
+          <a href="#files">ChemVault Files</a>
+          <a href="#mail">ChemVault Mail</a>
+          <a href="#docs">ChemVault Docs</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="academic-section">
+      <div class="container">
+        <div class="project-grid">
+          <article class="project-card" id="compounds">
+            <span class="status-pill active">可用</span>
+            <h3>ChemVault Compounds</h3>
+            <p>一个可用的化合物检索与分子信息界面，用于探索化学名称、分子式、标识符和相关分子数据。</p>
+            <div class="project-stack"><code>化合物检索</code><code>分子记录</code><code>科学查询</code></div>
+            <div class="project-meta"><span>化合物检索</span><span>化学</span><span>分子数据</span><span>科学检索</span></div>
+            <p><strong>路线图：</strong>扩大标识符覆盖，完善分子元数据，改进化合物结果预览，并加强与研究记录的连接。</p>
+            <a href="search.html">打开化合物检索</a>
+          </article>
+          <article class="project-card" id="extract">
+            <span class="status-pill prototype">原型 / 开发中</span>
+            <h3>ChemVault Extract</h3>
+            <p>一个 AI 辅助科学数据抽取系统，用于把非结构化论文、PDF、实验报告和实验文档转化为结构化研究数据。</p>
+            <div class="project-stack"><code>文档 AI</code><code>科学解析</code><code>结构化记录</code></div>
+            <div class="project-meta"><span>AI 辅助科学</span><span>文档理解</span><span>数据抽取</span><span>化学</span><span>研究智能</span></div>
+            <p><strong>路线图：</strong>实体抽取、表格解析、证据链接、复核队列和可导出的研究记录。</p>
+            <a href="platform.html#paper-to-database">平台上下文</a>
+          </article>
+          <article class="project-card" id="notif">
+            <span class="status-pill concept">概念 / 开发中</span>
+            <h3>ChemVault Notif</h3>
+            <p>面向 ChemVault 相关服务的通知与通信层，用于连接项目更新、系统提醒和研究工作流事件。</p>
+            <div class="project-stack"><code>事件路由</code><code>提醒</code><code>工作流消息</code></div>
+            <div class="project-meta"><span>通知系统</span><span>研究工作流</span><span>系统提醒</span><span>通信基础设施</span></div>
+            <p><strong>路线图：</strong>抽取任务提醒、文件事件、发布说明和可选择订阅的项目更新渠道。</p>
+            <a href="platform.html">平台上下文</a>
+          </article>
+          <article class="project-card" id="files">
+            <span class="status-pill active">可用</span>
+            <h3>ChemVault Files</h3>
+            <p>一个私有科学文件与文档托管层，用于组织学术材料、实验文件和项目资源。</p>
+            <div class="project-stack"><code>Cloudflare Access</code><code>私有存储</code><code>研究文件</code></div>
+            <div class="project-meta"><span>文件基础设施</span><span>学术存储</span><span>Cloudflare Access</span><span>知识管理</span></div>
+            <p><strong>路线图：</strong>文档索引、项目文件夹、元数据捕获，以及面向合作者的受控共享。</p>
+            <a href="contact.html">讨论访问</a>
+          </article>
+          <article class="project-card" id="mail">
+            <span class="status-pill prototype">实验性</span>
+            <h3>ChemVault Mail</h3>
+            <p>面向项目相关学术和技术往来的自定义通信界面。</p>
+            <div class="project-stack"><code>邮件界面</code><code>项目通信</code><code>工作流记录</code></div>
+            <div class="project-meta"><span>邮件系统</span><span>项目通信</span><span>学术工作流</span></div>
+            <p><strong>路线图：</strong>项目消息线程、研究联系人处理和结构化往来记录归档。</p>
+            <a href="contact.html">联系 ChemVault</a>
+          </article>
+          <article class="project-card" id="docs">
+            <span class="status-pill active">可用</span>
+            <h3>ChemVault Docs</h3>
+            <p>面向 ChemVault 工具、科学工作流和平台开发的文档中心。</p>
+            <div class="project-stack"><code>文档</code><code>开发者笔记</code><code>工作流参考</code></div>
+            <div class="project-meta"><span>文档</span><span>开发者体验</span><span>研究工具</span></div>
+            <p><strong>路线图：</strong>公开指南、API 笔记、抽取工作流文档和平台架构参考。</p>
+            <a href="library.html">打开资料库</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="academic-section academic-band">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">路线图</span>
+            <h2>从公开门户走向研究基础设施的分阶段路径。</h2>
+          </div>
+          <p>路线图刻意保持模块化，使每一层都能独立成熟，同时不阻塞现有静态公开站点。</p>
+        </div>
+        <div class="roadmap">
+          <article class="roadmap-item"><h3>基础层</h3><p>维护公开化学索引、化合物检索、研究页面和静态部署流水线。</p></article>
+          <article class="roadmap-item"><h3>抽取</h3><p>开发面向论文、PDF、实验报告和结构化科学记录的文档抽取实验。</p></article>
+          <article class="roadmap-item"><h3>知识层</h3><p>连接化合物、方法、文献主张、实验条件和来源链路。</p></article>
+          <article class="roadmap-item"><h3>协作层</h3><p>引入受控文件、通知和往来记录层，服务研究导向项目工作流。</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+    <script src="/scripts/visual-effects.js" defer></script>
+  </body>
+</html>

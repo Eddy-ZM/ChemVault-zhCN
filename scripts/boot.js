@@ -1,5 +1,7 @@
 (() => {
   const themeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const suppressStartupKey = "chemvault-suppress-next-boot";
+  const welcomeSeenKey = "chemvault-welcome-entered";
 
   function normaliseTheme(value) {
     return ["system", "light", "dark"].includes(value) ? value : "system";
@@ -28,16 +30,55 @@
     }, 1800);
   }
 
+  function isHomePage() {
+    const pathname = window.location.pathname.replace(/\/+$/, "");
+    return !pathname || pathname === "" || pathname === "/index.html";
+  }
+
+  function shouldShowStartupWelcome() {
+    if (!isHomePage()) return false;
+    try {
+      return sessionStorage.getItem(welcomeSeenKey) !== "true";
+    } catch {
+      return true;
+    }
+  }
+
+  function readSuppressStartup() {
+    try {
+      return sessionStorage.getItem(suppressStartupKey) === "true";
+    } catch {
+      return false;
+    }
+  }
+
+  function clearSuppressStartup() {
+    try {
+      sessionStorage.removeItem(suppressStartupKey);
+    } catch {
+      // Session storage can be unavailable in private contexts.
+    }
+  }
+
   try {
     applyInitialTheme();
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const suppress = sessionStorage.getItem("chemvault-suppress-next-boot") === "true";
+    const onHome = isHomePage();
+    const shouldWelcome = shouldShowStartupWelcome();
+    const suppress = readSuppressStartup();
+    if (shouldWelcome) {
+      document.documentElement.classList.add("startup-welcome-pending");
+      clearSuppressStartup();
+      return;
+    }
+    if (onHome) return;
     if (suppress) {
-      sessionStorage.removeItem("chemvault-suppress-next-boot");
+      clearSuppressStartup();
       if (!reduce) document.documentElement.classList.add("motion-soft-enter");
     }
     if (!reduce && !suppress) boot();
   } catch {
-    boot();
+    if (shouldShowStartupWelcome()) document.documentElement.classList.add("startup-welcome-pending");
+    else boot();
   }
 })();

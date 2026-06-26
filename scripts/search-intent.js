@@ -4,8 +4,8 @@
   const intents = [
     {
       id: "ketone-to-alcohol",
-      label: "Ketone to alcohol reduction",
-      description: "Carbonyl reduction choices for converting ketones into alcohol products.",
+      label: "酮到醇还原",
+      description: "用于将酮转化为醇产物的羰基还原选择。",
       tokens: [["ketone", "ketones"], ["alcohol", "alcohols"]],
       actionTokens: ["to", "into", "from", ...reductionTerms],
       patterns: [
