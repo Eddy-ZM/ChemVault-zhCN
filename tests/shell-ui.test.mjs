@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
@@ -15,11 +16,43 @@ function read(file) {
   return fs.readFileSync(file, "utf8");
 }
 
+function sha1(file) {
+  return crypto.createHash("sha1").update(fs.readFileSync(file)).digest("hex");
+}
+
 function navMarkup(html) {
   const match = html.match(/<nav class="site-nav" aria-label="主导航">([\s\S]*?)<\/nav>/);
   assert(match, "page has a main navigation block");
   return match[1];
 }
+
+const faviconVersion = "20260628a";
+const legacyCvFaviconHash = "76ea960f2f8859fc959c9ccc640af4e61267c64c";
+
+test("favicon entries use the current ChemVault logo mark", () => {
+  for (const file of bootHtmlFiles) {
+    const html = read(file);
+
+    assert.match(html, new RegExp(`<link rel="icon" href="/favicon\\.ico\\?v=${faviconVersion}" sizes="any" />`), `${file} versions the fallback favicon`);
+    assert.match(html, new RegExp(`<link rel="icon" href="/assets/chemvault-logo-mark\\.png\\?v=${faviconVersion}" type="image/png" sizes="512x512" />`), `${file} points browser tabs at the site logo mark`);
+    assert.match(html, new RegExp(`<link rel="apple-touch-icon" href="/assets/chemvault-apple-touch-icon\\.png\\?v=${faviconVersion}" />`), `${file} versions the Apple touch icon`);
+    assert.doesNotMatch(html, /href="\/assets\/chemvault-icon-192\.png"/, `${file} no longer advertises the legacy CV favicon as the browser tab icon`);
+  }
+
+  const manifest = JSON.parse(read("site.webmanifest"));
+
+  assert.deepEqual(
+    manifest.icons.map((icon) => icon.src),
+    [
+      `/assets/chemvault-icon-192.png?v=${faviconVersion}`,
+      `/assets/chemvault-icon-512.png?v=${faviconVersion}`
+    ],
+    "manifest icons use cache-busted logo-derived assets"
+  );
+  assert.notEqual(sha1("favicon.ico"), legacyCvFaviconHash, "favicon.ico is no longer the legacy CV icon file");
+  assert.equal(sha1("assets/chemvault-icon-512.png"), sha1("assets/chemvault-logo-mark.png"), "512px PWA icon is generated from the site logo mark");
+  assert.equal(sha1("assets/favicon-512.png"), sha1("assets/chemvault-logo-mark.png"), "512px favicon asset is generated from the site logo mark");
+});
 
 test("site navigation exposes core destinations and groups secondary pages under 更多", () => {
   for (const file of pageFiles) {

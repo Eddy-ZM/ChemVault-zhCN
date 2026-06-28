@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="ChemVault">
-  <rect width="96" height="96" rx="20" fill="#ffffff"/>
-  <path d="M70 24 48 11 20 27v42l28 16 22-13V58L48 71 32 62V35l16-10 22 13V24Z" fill="#285a86"/>
-  <path d="M70 42 83 34v21l-13 8V42Z" fill="#285a86"/>
+  <defs>
+    <linearGradient id="chemvault-mark" x1="18" y1="74" x2="78" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#173f67"/>
+      <stop offset="0.48" stop-color="#2d628f"/>
+      <stop offset="1" stop-color="#0f314f"/>
+    </linearGradient>
+  </defs>
+  <path d="M70 24 48 11 20 27v42l28 16 22-13V58L48 71 32 62V35l16-10 22 13V24Z" fill="url(#chemvault-mark)"/>
+  <path d="M70 42 83 34v21l-13 8V42Z" fill="url(#chemvault-mark)"/>
 </svg>
