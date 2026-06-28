@@ -26,7 +26,7 @@ function navMarkup(html) {
   return match[1];
 }
 
-const faviconVersion = "20260628a";
+const faviconVersion = "20260629a";
 const legacyCvFaviconHash = "76ea960f2f8859fc959c9ccc640af4e61267c64c";
 
 test("favicon entries use the current ChemVault logo mark", () => {
