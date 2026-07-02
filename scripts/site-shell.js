@@ -175,7 +175,12 @@
   function markActivePage() {
     const current = normalisePath(location.pathname);
     document.querySelectorAll(".site-nav a").forEach((link) => {
-      const target = normalisePath(new URL(link.getAttribute("href") || "", location.href).pathname);
+      const url = new URL(link.getAttribute("href") || "", location.href);
+      if (url.origin !== location.origin) {
+        link.removeAttribute("aria-current");
+        return;
+      }
+      const target = normalisePath(url.pathname);
       if (target === current) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
     });
@@ -210,6 +215,7 @@
           <a href="/pages/spectroscopy.html">谱学</a>
           <a href="/pages/atlas.html">图谱</a>
           <a href="/pages/library.html">资料库</a>
+          <a href="https://docs.chemvault.science/" target="_blank" rel="noopener noreferrer">文档</a>
           <a href="/pages/about.html">关于</a>
           <a href="/pages/filing.html">备案信息</a>
           <a href="/pages/team.html">团队</a>
@@ -340,6 +346,7 @@
                 <div class="footer-column footer-reveal" style="--footer-delay: 270ms">
                   <span class="footer-heading">资源</span>
                   <a href="/pages/library.html">资料库</a>
+                  <a href="https://docs.chemvault.science/" target="_blank" rel="noopener noreferrer">文档</a>
                   <a href="/pages/methods.html">方法</a>
                   <a href="/pages/spectroscopy.html">谱学</a>
                   <a href="/pages/dossiers.html">档案</a>

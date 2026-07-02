@@ -44,7 +44,12 @@
     });
 
     document.querySelectorAll(".site-nav a").forEach((link) => {
-      const target = normalisePath(new URL(link.getAttribute("href") || "", location.href).pathname);
+      const url = new URL(link.getAttribute("href") || "", location.href);
+      if (url.origin !== location.origin) {
+        link.removeAttribute("aria-current");
+        return;
+      }
+      const target = normalisePath(url.pathname);
       if (target === normalisePath(location.pathname)) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
     });
