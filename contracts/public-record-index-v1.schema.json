@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chemvault.science/contracts/public-record-index-v1.schema.json",
+  "title": "ChemVault public record index",
+  "description": "Language-neutral contract shared by the ChemVault English and Chinese public sites.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["kind", "version", "generatedAt", "site", "counts", "records"],
+  "properties": {
+    "kind": { "const": "ChemVaultPublicRecordIndex" },
+    "version": { "type": "string", "minLength": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "site": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "origin", "href", "searchPage"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "origin": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "href": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "searchPage": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["totalRecords", "byType"],
+      "properties": {
+        "totalRecords": { "type": "integer", "minimum": 0 },
+        "byType": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "type", "typeLabel", "title", "summary", "tags", "sections", "url", "searchText"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "typeLabel": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "subtitle": { "type": "string" },
+        "summary": { "type": "string" },
+        "domain": { "type": "string" },
+        "maturity": { "type": "number", "minimum": 0, "maximum": 100 },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["title", "items"],
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "items": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "searchText": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

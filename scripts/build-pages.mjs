@@ -10,6 +10,7 @@ const entries = [
   "_headers",
   "_redirects",
   "assets",
+  "contracts",
   "data",
   "favicon.ico",
   "index.html",

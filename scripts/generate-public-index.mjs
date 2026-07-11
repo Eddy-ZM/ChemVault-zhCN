@@ -130,7 +130,13 @@ function publicRecord(record, api) {
   if (/^https?:\/\//i.test(String(sourcePath || ""))) {
     payload.sourceUrl = absoluteUrl(sourcePath);
   }
-  return pruneEmpty(payload);
+  const publicPayload = pruneEmpty(payload);
+  return {
+    ...publicPayload,
+    summary: payload.summary,
+    tags: payload.tags,
+    sections: payload.sections
+  };
 }
 
 function absoluteUrl(path) {
