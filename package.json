@@ -22,6 +22,6 @@
     "d1:migrate:images": "wrangler d1 execute chemvault --file=migrations/0001_add_record_images.sql"
   },
   "devDependencies": {
-    "wrangler": "^4.95.0"
+    "wrangler": "^4.110.0"
   }
 }
