@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 
 const SITE_ORIGIN = process.env.CHEMVAULT_SITE_ORIGIN || "https://chemvault-zh.pages.dev";
@@ -56,7 +57,7 @@ const counts = records.reduce((memo, record) => {
 const payload = {
   kind: "ChemVaultPublicRecordIndex",
   version: api.version || "unknown",
-  generatedAt: new Date().toISOString(),
+  generatedAt: deterministicGeneratedAt(),
   site: {
     name: "ChemVault",
     origin: SITE_ORIGIN,
@@ -175,4 +176,17 @@ function pruneEmpty(value) {
       if (typeof item === "object") return Object.keys(item).length > 0;
       return true;
     }));
+}
+
+function deterministicGeneratedAt() {
+  if (process.env.SOURCE_DATE_EPOCH) {
+    const epoch = Number(process.env.SOURCE_DATE_EPOCH);
+    if (!Number.isFinite(epoch)) throw new Error("SOURCE_DATE_EPOCH must be a Unix timestamp.");
+    return new Date(epoch * 1000).toISOString();
+  }
+  try {
+    return execFileSync("git", ["log", "-1", "--format=%cI", "--", ...dataFiles], { encoding: "utf8" }).trim();
+  } catch {
+    return "1970-01-01T00:00:00.000Z";
+  }
 }

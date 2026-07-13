@@ -21,3 +21,5 @@ jobs:
       - run: npm test
       - run: npm run contract:verify
       - run: npm run build
+      - name: Verify reproducible tracked data
+        run: git diff --exit-code -- data/public-record-index.json
