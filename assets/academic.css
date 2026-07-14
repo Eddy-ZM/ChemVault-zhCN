@@ -5705,3 +5705,184 @@ body {
     max-width: 100% !important;
   }
 }
+
+/* Home exhibition stage. Loaded after the legacy academic layer. */
+.academic-home .academic-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 720px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #07111f;
+  background-image: url("home-molecular-exhibition.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.academic-home .academic-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(7, 17, 31, 0.7);
+}
+
+.academic-home .academic-hero-grid {
+  min-height: 720px;
+  align-items: center;
+  gap: clamp(36px, 7vw, 100px);
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+
+.academic-home .academic-hero-content {
+  max-width: 660px;
+}
+
+.academic-home .hero-title,
+.academic-home .hero-subtitle {
+  color: #fffdf8;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.academic-home .hero-title {
+  font-size: clamp(3.9rem, 9vw, 7.8rem);
+  line-height: 0.86;
+}
+
+.academic-home .hero-subtitle {
+  display: block;
+  max-width: 620px;
+  margin-top: 22px;
+  font-size: clamp(1.65rem, 3vw, 2.65rem);
+  line-height: 1.08;
+}
+
+.academic-home .hero-lead {
+  max-width: 610px;
+  color: #c4cfda;
+  font-size: 1.06rem;
+}
+
+.academic-home .hero-proof-row span {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(7, 17, 31, 0.62);
+  color: #d8e1e9;
+}
+
+.academic-home .academic-button.primary {
+  border-color: #155eef;
+  background: #155eef;
+  color: #ffffff;
+}
+
+.academic-home .academic-button.ghost {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(7, 17, 31, 0.48);
+  color: #ffffff;
+}
+
+.academic-home .hero-instrument {
+  min-height: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.academic-home .chem-orbit-shell,
+.academic-home .stage-glow,
+.academic-home .hero-beam-field,
+.academic-home .lab-console {
+  display: none;
+}
+
+.academic-home .compound-search-panel {
+  position: relative;
+  inset: auto;
+  width: min(100%, 460px);
+  margin-left: auto;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(7, 17, 31, 0.9);
+  color: #ffffff;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(18px);
+}
+
+.academic-home .compound-search-panel p,
+.academic-home .compound-search-panel label,
+.academic-home .compound-search-panel .command-topline,
+.academic-home .compound-search-panel .search-status {
+  color: #aebbc9;
+}
+
+.academic-home .compound-search-panel input {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: #fffdf8;
+  color: #10203a;
+}
+
+.academic-home main > section:not(.academic-hero) {
+  background: #f4f1e9;
+}
+
+@media (max-width: 900px) {
+  .academic-home .academic-hero,
+  .academic-home .academic-hero-grid {
+    min-height: auto;
+  }
+
+  .academic-home .academic-hero-grid {
+    grid-template-columns: 1fr;
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .academic-home .compound-search-panel {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Mobile exhibition panorama: keep the complete 1918x820 artwork in flow. */
+@media (max-width: 900px) {
+  .academic-home .academic-hero {
+    background-image: none !important;
+  }
+
+  .academic-home .academic-hero-grid {
+    align-items: stretch;
+  }
+
+  .academic-home .academic-hero-content {
+    order: 1;
+  }
+
+  .academic-home .academic-hero-grid::before {
+    content: "";
+    position: relative !important;
+    inset: auto !important;
+    z-index: 0 !important;
+    display: block !important;
+    order: 2;
+    width: 100%;
+    aspect-ratio: 1918 / 820;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    background-color: #07111f !important;
+    background-image: url("home-molecular-exhibition.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .academic-home .hero-instrument {
+    order: 3;
+  }
+}

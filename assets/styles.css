@@ -34,6 +34,39 @@
   --font-sans: var(--font-body);
 }
 
+/* ChemVault molecular exhibition theme — shared visual language, July 2026. */
+@font-face {
+  font-family: "CV Inter";
+  src: url("fonts/inter-400.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CV Inter";
+  src: url("fonts/inter-600.ttf") format("truetype");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CV Newsreader";
+  src: url("fonts/newsreader-400.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CV Newsreader";
+  src: url("fonts/newsreader-500.ttf") format("truetype");
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body.light-mode {
   color-scheme: light;
   --bg: #f5f5f7;
@@ -62,6 +95,243 @@ body.dark-mode {
   --strong-line: rgba(255, 255, 255, 0.28);
   --ink: #ffffff;
   --shadow: 0 18px 54px rgba(0, 0, 0, 0.32);
+}
+
+/* Molecular exhibition visual override. Kept at the end of the token cascade so
+   existing search, theme and navigation behavior remains unchanged. */
+:root,
+body.light-mode,
+body.page-shell:not([data-boot-label="Search"]) {
+  --bg: #f4f1e9;
+  --bg-2: #fffdf8;
+  --surface: #fffdf8;
+  --surface-2: #f8f5ee;
+  --surface-3: #ece8df;
+  --text: #10203a;
+  --muted: #647084;
+  --line: rgba(16, 32, 58, 0.15);
+  --strong-line: rgba(16, 32, 58, 0.32);
+  --amber: #155eef;
+  --teal: #0e7490;
+  --blue: #155eef;
+  --ink: #ffffff;
+  --shadow: 0 18px 42px rgba(7, 17, 31, 0.08);
+  --radius: 10px;
+  --font-display: "CV Newsreader", "Songti SC", "STSong", serif;
+  --font-body: "CV Inter", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+  background: #f4f1e9;
+}
+
+.site-header {
+  border-bottom-color: rgba(255, 255, 255, 0.13);
+  background: rgba(7, 17, 31, 0.97);
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+
+.site-header .brand,
+.site-header .brand strong,
+.site-header .site-nav a,
+.site-header .nav-more summary {
+  color: #f7f4ec;
+}
+
+.site-header .brand small,
+.site-header .search-shell,
+.site-header .search-shell input {
+  color: #aebbc9;
+}
+
+.site-header .search-shell,
+.site-header .theme-toggle,
+.site-header .icon-button {
+  border-color: rgba(255, 255, 255, 0.17);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.site-header .nav-more-menu,
+.site-header .shell-search-results {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #0b1b2d;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+.academic-home .academic-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 720px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #07111f;
+  background-image: url("home-molecular-exhibition.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.academic-home .academic-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(7, 17, 31, 0.7);
+}
+
+.academic-home .academic-hero-grid {
+  min-height: 720px;
+  align-items: center;
+  gap: clamp(36px, 7vw, 100px);
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+
+.academic-home .academic-hero-content {
+  max-width: 660px;
+}
+
+.academic-home .hero-title,
+.academic-home .hero-subtitle {
+  color: #fffdf8;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.academic-home .hero-title {
+  font-size: clamp(3.9rem, 9vw, 7.8rem);
+  line-height: 0.86;
+}
+
+.academic-home .hero-subtitle {
+  display: block;
+  max-width: 620px;
+  margin-top: 22px;
+  font-size: clamp(1.65rem, 3vw, 2.65rem);
+  line-height: 1.08;
+}
+
+.academic-home .hero-lead {
+  max-width: 610px;
+  color: #c4cfda;
+  font-size: 1.06rem;
+}
+
+.academic-home .hero-proof-row span {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(7, 17, 31, 0.62);
+  color: #d8e1e9;
+}
+
+.academic-home .academic-button.primary {
+  border-color: #155eef;
+  background: #155eef;
+  color: #ffffff;
+}
+
+.academic-home .academic-button.ghost {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(7, 17, 31, 0.48);
+  color: #ffffff;
+}
+
+.academic-home .hero-instrument {
+  min-height: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.academic-home .chem-orbit-shell,
+.academic-home .stage-glow,
+.academic-home .hero-beam-field,
+.academic-home .lab-console {
+  display: none;
+}
+
+.academic-home .compound-search-panel {
+  position: relative;
+  inset: auto;
+  width: min(100%, 460px);
+  margin-left: auto;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(7, 17, 31, 0.9);
+  color: #ffffff;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(18px);
+}
+
+.academic-home .compound-search-panel p,
+.academic-home .compound-search-panel label,
+.academic-home .compound-search-panel .command-topline,
+.academic-home .compound-search-panel .search-status {
+  color: #aebbc9;
+}
+
+.academic-home .compound-search-panel input {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: #fffdf8;
+  color: #10203a;
+}
+
+.academic-home main > section:not(.academic-hero) {
+  background: #f4f1e9;
+}
+
+.academic-home h2,
+.academic-home h3,
+.page-shell h1,
+.page-shell h2,
+.page-shell h3 {
+  font-family: var(--font-display);
+  color: #10203a;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.academic-home article,
+.academic-home .academic-card,
+.academic-home .research-card,
+.page-shell article,
+.page-shell .panel,
+.page-shell .card {
+  border-color: rgba(16, 32, 58, 0.15);
+  border-radius: 10px;
+  background: #fffdf8;
+  box-shadow: none;
+}
+
+.site-footer {
+  border-top-color: rgba(255, 255, 255, 0.12);
+  background: #07111f;
+  color: #c4cfda;
+}
+
+.site-footer a,
+.site-footer strong,
+.site-footer h2,
+.site-footer h3 {
+  color: #fffdf8;
+}
+
+@media (max-width: 900px) {
+  .academic-home .academic-hero,
+  .academic-home .academic-hero-grid {
+    min-height: auto;
+  }
+
+  .academic-home .academic-hero-grid {
+    grid-template-columns: 1fr;
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .academic-home .compound-search-panel {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 body.page-shell:not([data-boot-label="Search"]) {

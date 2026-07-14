@@ -3060,3 +3060,187 @@ html.dark-mode body:not(.page-shell) :where(.lead, .section-heading p, .portal-c
 body.dark-mode:not(.page-shell) :where(.lead, .section-heading p, .portal-card p, .home-quick-card span) {
   color: #a8adb7;
 }
+
+/* Final molecular exhibition cascade. */
+:root,
+body.light-mode,
+body.page-shell:not([data-boot-label="Search"]) {
+  --bg: #f4f1e9;
+  --bg-2: #fffdf8;
+  --surface: #fffdf8;
+  --surface-2: #f8f5ee;
+  --surface-3: #ece8df;
+  --text: #10203a;
+  --muted: #647084;
+  --line: rgba(16, 32, 58, 0.15);
+  --strong-line: rgba(16, 32, 58, 0.32);
+  --amber: #155eef;
+  --teal: #0e7490;
+  --blue: #155eef;
+  --shadow: 0 18px 42px rgba(7, 17, 31, 0.08);
+  --radius: 10px;
+  --font-display: "CV Newsreader", "Songti SC", "STSong", serif;
+  --font-body: "CV Inter", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+
+body,
+main,
+body.page-shell:not([data-boot-label="Search"]) {
+  background: #f4f1e9;
+}
+
+.site-header {
+  border-bottom-color: rgba(255, 255, 255, 0.13);
+  background: rgba(7, 17, 31, 0.97);
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+
+.site-header .brand,
+.site-header .brand strong,
+.site-header .site-nav a,
+.site-header .nav-more summary {
+  color: #f7f4ec;
+}
+
+.site-header .brand small,
+.site-header .search-shell,
+.site-header .search-shell input {
+  color: #aebbc9;
+}
+
+.site-header .search-shell,
+.site-header .theme-toggle,
+.site-header .icon-button {
+  border-color: rgba(255, 255, 255, 0.17);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.site-header .nav-more-menu,
+.site-header .shell-search-results {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #0b1b2d;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+:where(.academic-home, .page-shell) h1,
+:where(.academic-home, .page-shell) h2,
+:where(.academic-home, .page-shell) h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+:where(
+  .home-status-panel,
+  .home-search-card,
+  .home-metric-grid > div,
+  .home-quick-card,
+  .portal-card,
+  .page-index-card,
+  .external-source-card,
+  .local-result-card,
+  .live-card,
+  .fallback-source-card,
+  .panel,
+  .card
+) {
+  border-color: rgba(16, 32, 58, 0.15);
+  border-radius: 10px;
+  background: #fffdf8;
+  box-shadow: none;
+}
+
+.site-footer {
+  border-top-color: rgba(255, 255, 255, 0.12);
+  background: #07111f;
+  color: #c4cfda;
+}
+
+.site-footer a,
+.site-footer strong,
+.site-footer h2,
+.site-footer h3 {
+  color: #fffdf8;
+}
+
+/* Final high-specificity surface guard for public route cards. */
+html body.page-shell.page-shell :is(
+  .page-panel,
+  .page-index-card,
+  .page-index-panel,
+  .portal-card,
+  .data-window,
+  .source-browser-card,
+  .local-result-card,
+  .external-source-card,
+  .fallback-source-card,
+  .live-card,
+  .workbench-command-card,
+  .workbench-detail-card,
+  .route-card,
+  .mechanism-audit-card,
+  .material-interface-card,
+  .related-record-card,
+  .record-panel,
+  .record-trust-card,
+  .panel,
+  .card
+) {
+  border-color: var(--line) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  background-image: none !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html body.page-shell.page-shell :is(
+  .page-panel,
+  .page-index-card,
+  .page-index-panel,
+  .portal-card,
+  .data-window,
+  .source-browser-card,
+  .local-result-card,
+  .external-source-card,
+  .fallback-source-card,
+  .live-card,
+  .workbench-command-card,
+  .workbench-detail-card,
+  .route-card,
+  .mechanism-audit-card,
+  .material-interface-card,
+  .related-record-card,
+  .record-panel,
+  .record-trust-card,
+  .panel,
+  .card
+)::before,
+html body.page-shell.page-shell :is(
+  .page-panel,
+  .page-index-card,
+  .page-index-panel,
+  .portal-card,
+  .data-window,
+  .source-browser-card,
+  .local-result-card,
+  .external-source-card,
+  .fallback-source-card,
+  .live-card,
+  .workbench-command-card,
+  .workbench-detail-card,
+  .route-card,
+  .mechanism-audit-card,
+  .material-interface-card,
+  .related-record-card,
+  .record-panel,
+  .record-trust-card,
+  .panel,
+  .card
+)::after {
+  background: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
