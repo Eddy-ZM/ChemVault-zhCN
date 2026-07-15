@@ -22,6 +22,7 @@
   };
 
   function initShell() {
+    normalizePublicMarketingHeader();
     const header = $(".site-header");
     const navToggle = $(".menu-toggle");
     if (header && navToggle) {
@@ -59,7 +60,31 @@
       if (group.querySelector("a[aria-current]")) summary.setAttribute("aria-current", "page");
       else summary.removeAttribute("aria-current");
     });
+    normalizePublicMarketingHeader();
     adaptShellLayout();
+  }
+
+  function normalizePublicMarketingHeader() {
+    const header = $(".site-header");
+    const shell = header?.querySelector(".nav-shell");
+    const brand = shell?.querySelector(".brand");
+    const nav = shell?.querySelector(".site-nav");
+    const actions = shell?.querySelector(".header-actions");
+    if (!header || !shell || !brand || !nav || !actions) return;
+
+    header.dataset.marketingNav = "true";
+    brand.setAttribute("href", "index.html");
+    brand.setAttribute("aria-label", "ChemVault 首页");
+    brand.innerHTML = "<span><strong>ChemVault</strong></span>";
+    nav.innerHTML = `
+      <a href="index.html#mission">使命</a>
+      <a href="pages/research.html">研究</a>
+      <a href="pages/platform.html">知识</a>
+      <a href="https://docs.chemvault.science/" target="_blank" rel="noopener noreferrer">资源</a>
+      <a href="pages/about.html">关于</a>
+    `;
+    actions.innerHTML = `<a class="small-button public-header-cta" href="index.html#mission">探索 ChemVault</a>`;
+    header.querySelector("#shellSearchResults")?.remove();
   }
 
   function applyTheme(theme, options = {}) {

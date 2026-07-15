@@ -34,6 +34,28 @@
   --font-sans: var(--font-body);
 }
 
+html body.page-shell .site-header[data-marketing-nav="true"] .brand,
+html body.page-shell .site-header[data-marketing-nav="true"] .brand strong,
+html body.page-shell .site-header[data-marketing-nav="true"] .site-nav a,
+html body.page-shell .site-header[data-marketing-nav="true"] .menu-toggle,
+html body.academic-home .site-header[data-marketing-nav="true"] .brand,
+html body.academic-home .site-header[data-marketing-nav="true"] .brand strong,
+html body.academic-home .site-header[data-marketing-nav="true"] .site-nav a,
+html body.academic-home .site-header[data-marketing-nav="true"] .menu-toggle {
+  color: #fff !important;
+}
+
+html body.page-shell .site-header[data-marketing-nav="true"] .site-nav,
+html body.page-shell .site-header[data-marketing-nav="true"] .site-nav a,
+html body.page-shell .site-header[data-marketing-nav="true"] .site-nav a[aria-current="page"],
+html body.academic-home .site-header[data-marketing-nav="true"] .site-nav,
+html body.academic-home .site-header[data-marketing-nav="true"] .site-nav a,
+html body.academic-home .site-header[data-marketing-nav="true"] .site-nav a[aria-current="page"] {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 /* ChemVault molecular exhibition theme — shared visual language, July 2026. */
 @font-face {
   font-family: "CV Inter";
@@ -4145,4 +4167,186 @@ body.academic-home main a[href] {
   min-height: 46px !important;
   display: flex;
   align-items: center;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"],
+body.academic-home .site-header[data-marketing-nav="true"] {
+  height: 74px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(5, 9, 14, 0.97) !important;
+  color: #f8f6f1 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .nav-shell,
+body.academic-home .site-header[data-marketing-nav="true"] .nav-shell {
+  width: min(1184px, calc(100% - 64px));
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  gap: 28px;
+  align-items: center;
+  min-height: 74px;
+  padding: 0;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .brand,
+body.academic-home .site-header[data-marketing-nav="true"] .brand {
+  justify-self: start;
+  gap: 0;
+  min-width: 46px;
+  min-height: 46px;
+  color: #fff !important;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transform: none !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .brand-mark,
+body.page-shell .site-header[data-marketing-nav="true"] .brand small,
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav::before,
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav a::after,
+body.page-shell .site-header[data-marketing-nav="true"] .nav-more,
+body.page-shell .site-header[data-marketing-nav="true"] .search-shell,
+body.page-shell .site-header[data-marketing-nav="true"] .theme-toggle,
+body.academic-home .site-header[data-marketing-nav="true"] .brand-mark,
+body.academic-home .site-header[data-marketing-nav="true"] .brand small,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav::before,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav a::after,
+body.academic-home .site-header[data-marketing-nav="true"] .nav-more,
+body.academic-home .site-header[data-marketing-nav="true"] .search-shell,
+body.academic-home .site-header[data-marketing-nav="true"] .theme-toggle {
+  display: none !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav {
+  width: auto;
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  gap: 35px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav a,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav a {
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  color: #d8dde5 !important;
+  box-shadow: none !important;
+  font-size: 14px;
+  font-weight: 500;
+  transform: none !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav a:hover,
+body.page-shell .site-header[data-marketing-nav="true"] .site-nav a:focus-visible,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav a:hover,
+body.academic-home .site-header[data-marketing-nav="true"] .site-nav a:focus-visible {
+  color: #fff !important;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .header-actions,
+body.academic-home .site-header[data-marketing-nav="true"] .header-actions {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .public-header-cta,
+body.academic-home .site-header[data-marketing-nav="true"] .public-header-cta {
+  min-width: 46px;
+  min-height: 46px;
+  height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(68, 132, 255, 0.82);
+  border-radius: 12px;
+  background: transparent !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+body.page-shell .site-header[data-marketing-nav="true"] .public-header-cta:hover,
+body.page-shell .site-header[data-marketing-nav="true"] .public-header-cta:focus-visible,
+body.academic-home .site-header[data-marketing-nav="true"] .public-header-cta:hover,
+body.academic-home .site-header[data-marketing-nav="true"] .public-header-cta:focus-visible {
+  border-color: #79a6ff;
+  background: rgba(23, 105, 255, 0.16) !important;
+}
+
+@media (max-width: 900px) {
+  body.page-shell .site-header[data-marketing-nav="true"],
+  body.academic-home .site-header[data-marketing-nav="true"] {
+    height: auto;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .nav-shell,
+  body.academic-home .site-header[data-marketing-nav="true"] .nav-shell {
+    width: min(100% - 32px, 1184px);
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .menu-toggle,
+  body.academic-home .site-header[data-marketing-nav="true"] .menu-toggle {
+    display: inline-flex;
+    grid-column: 2;
+    min-width: 64px;
+    min-height: 42px;
+    border-color: rgba(255, 255, 255, 0.14);
+    background: transparent;
+    color: #fff;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .site-nav,
+  body.page-shell .site-header[data-marketing-nav="true"] .header-actions,
+  body.academic-home .site-header[data-marketing-nav="true"] .site-nav,
+  body.academic-home .site-header[data-marketing-nav="true"] .header-actions {
+    display: none;
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"].nav-open .site-nav,
+  body.page-shell .site-header[data-marketing-nav="true"].nav-open .header-actions,
+  body.academic-home .site-header[data-marketing-nav="true"].nav-open .site-nav,
+  body.academic-home .site-header[data-marketing-nav="true"].nav-open .header-actions {
+    display: grid;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .site-nav,
+  body.academic-home .site-header[data-marketing-nav="true"] .site-nav {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 12px 0 0;
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .site-nav a,
+  body.academic-home .site-header[data-marketing-nav="true"] .site-nav a {
+    justify-content: flex-start;
+    min-height: 46px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  body.page-shell .site-header[data-marketing-nav="true"] .public-header-cta,
+  body.academic-home .site-header[data-marketing-nav="true"] .public-header-cta {
+    width: 100%;
+    margin-top: 10px;
+  }
 }
