@@ -148,6 +148,7 @@
 
   function wireStartupWelcome(options = {}) {
     if (startupWelcome && document.body.contains(startupWelcome)) return true;
+    if (!options.force) return false;
     if (!options.force && hasSeenStartupWelcome()) return false;
     if (!options.force && pageName(new URL(window.location.href)) !== "index.html") return false;
 

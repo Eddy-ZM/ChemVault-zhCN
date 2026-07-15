@@ -1,7 +1,6 @@
 (() => {
   const themeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
   const suppressStartupKey = "chemvault-suppress-next-boot";
-  const welcomeSeenKey = "chemvault-welcome-entered";
 
   function normaliseTheme(value) {
     return ["system", "light", "dark"].includes(value) ? value : "system";
@@ -36,12 +35,7 @@
   }
 
   function shouldShowStartupWelcome() {
-    if (!isHomePage()) return false;
-    try {
-      return sessionStorage.getItem(welcomeSeenKey) !== "true";
-    } catch {
-      return true;
-    }
+    return false;
   }
 
   function readSuppressStartup() {

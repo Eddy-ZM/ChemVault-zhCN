@@ -4046,3 +4046,103 @@ body.page-shell:not([data-boot-label="Search"]) :where(
 ) {
   color: var(--muted);
 }
+
+.brand,
+.site-nav a,
+.nav-more > summary,
+.nav-more-menu a,
+.nav-link,
+.theme-toggle,
+.mobile-nav-toggle,
+.hero-actions a,
+.page-actions a,
+.footer a,
+.site-footer a,
+.portal-card a,
+.app-card a {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.theme-toggle,
+.mobile-nav-toggle {
+  width: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
+}
+
+.menu-toggle,
+.icon-button.menu-toggle {
+  width: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
+}
+
+.site-header .theme-toggle,
+.site-header .icon-button.theme-toggle {
+  width: 46px !important;
+  min-width: 46px !important;
+  min-height: 46px !important;
+}
+
+@media (max-width: 900px) {
+  .academic-home .hero-instrument,
+  .academic-home .compound-search-panel {
+    width: 100% !important;
+    max-width: calc(100vw - 28px) !important;
+    margin-inline: 0 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+  }
+
+  .academic-home .academic-hero-grid {
+    overflow-x: clip;
+  }
+}
+
+button,
+select,
+input:not([type="checkbox"]):not([type="radio"]),
+.filter-chip,
+.source-filter,
+.command-tab,
+.segment-button,
+.pagination button,
+.result-pagination button,
+.platform-link-list a,
+.service-link-list a,
+.related-links a,
+.portal-actions a,
+.record-actions a,
+.hero-proof-row a,
+.hero-actions a {
+  min-width: 46px !important;
+  min-height: 46px !important;
+}
+
+.platform-link-list a,
+.service-link-list a,
+.related-links a,
+.portal-actions a,
+.record-actions a,
+.hero-proof-row a,
+.hero-actions a {
+  display: inline-flex;
+  align-items: center;
+}
+
+body.page-shell main a[href],
+body.academic-home main a[href] {
+  min-width: 46px;
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+}
+
+:is(.checkbox-label, .radio-label, label:has(input[type="checkbox"]), label:has(input[type="radio"])) {
+  min-height: 46px !important;
+  display: flex;
+  align-items: center;
+}
