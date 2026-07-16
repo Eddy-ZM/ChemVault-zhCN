@@ -4088,6 +4088,40 @@ body.page-shell:not([data-boot-label="Search"]) :where(
   align-items: center;
 }
 
+body.page-shell .site-footer,
+body.academic-home .site-footer {
+  height: auto;
+  clip-path: none;
+  view-timeline-name: none;
+}
+
+body.page-shell .footer-sticky-layer,
+body.academic-home .footer-sticky-layer {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  height: auto;
+  pointer-events: auto;
+}
+
+body.page-shell .footer-sticky-shell,
+body.academic-home .footer-sticky-shell {
+  position: relative;
+  top: auto;
+  height: auto;
+  overflow: visible;
+}
+
+body.page-shell .footer-panel,
+body.page-shell .footer-reveal,
+body.academic-home .footer-panel,
+body.academic-home .footer-reveal {
+  animation: none;
+  filter: none;
+  opacity: 1;
+  transform: none;
+}
+
 .theme-toggle,
 .mobile-nav-toggle {
   width: 46px !important;
