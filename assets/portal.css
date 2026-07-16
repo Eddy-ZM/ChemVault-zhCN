@@ -729,6 +729,8 @@ body.light-mode .graph-board {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  min-height: 44px;
+  padding-block: 8px;
   color: var(--text);
   cursor: pointer;
   font-weight: 850;
